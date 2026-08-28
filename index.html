@@ -157,7 +157,6 @@
 .lt-participant-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
 .lt-participant-row label { flex: 1; font-size: 14px; display: flex; align-items: flex-start; gap: 8px; pointer-events: none; }
 .lt-participant-amt { width: 84px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-align: right; }
-.lt-split-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 13px; }
 
 /* Color Picker */
 .lt-color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; box-sizing: border-box; transition: transform 0.2s; }
@@ -203,7 +202,7 @@
   const LISTS_KEY = 'lunchtab-lists-v6';
   const ME_KEY = 'lunchtab-me-v6';
 
-  // --- MÜNSTER INSPIRATION (Bogenstraße & City) ---
+  // --- MÜNSTER INSPIRATION ---
   const LUNCH_POOL = {
     "Italienisch & Pasta 🍝": ["Marias Pastabar", "Mocca d'or", "Pasta e Basta", "L'Osteria", "Vapiano", "Pizzeria Lido", "481 Pizzamanufaktur"],
     "Bowls & Healthy 🥗": ["Beetschwester", "Krawummel", "Green Panda", "Dean & David", "Açaí", "Royals & Rice"],
@@ -270,10 +269,9 @@
     error: null,
     sheet: null,
     editPersonColor: null, 
-    inspView: {} // Speichert die aktuellen 2 Vorschläge pro Kategorie
+    inspView: {} 
   };
 
-  // Init Inspiration View
   for (const cat in LUNCH_POOL) {
     state.inspView[cat] = getRandomItems(LUNCH_POOL[cat], 2);
   }
@@ -334,7 +332,7 @@
   }
 
   function loadLocal() {
-    const localData = localStorage.getItem(LISTS_KEY) || localStorage.getItem('lunchtab-lists-v5');
+    const localData = localStorage.getItem(LISTS_KEY) || localStorage.getItem('lunchtab-lists-v5') || localStorage.getItem('lunchtab-lists-v4');
     if (localData) state.lists = JSON.parse(localData);
     render();
   }
@@ -427,10 +425,6 @@
   }
 
   // --- Tab 2: Bestellung ---
-  window.setEditDishId = function(dishId) {
-    menuState.editDishId = dishId;
-    window.renderMenuManagerSheet();
-  };
   window.addDishToMenu = async function(venueId, emoji, name, priceStr) {
     const list = getActiveList();
     const v = list.venues.find(x => x.id === venueId);
@@ -832,10 +826,9 @@
       const btnAddVenue = document.getElementById('btn-add-venue');
       if (btnAddVenue) btnAddVenue.onclick = async () => {
         const name = document.getElementById('inp-add-venue').value;
-        if(name) {
-            window.addVenue(name);
-        }
+        if(name) { window.addVenue(name); }
       };
+      
       const btnOpenInspiration = document.getElementById('btn-open-inspiration');
       if (btnOpenInspiration) btnOpenInspiration.onclick = () => { state.sheet='inspiration'; window.renderInspirationSheet(); };
 
@@ -851,7 +844,8 @@
     if (state.activeTab === 'ordering') {
       const editMenuBtn = document.getElementById('btn-edit-menu');
       if (editMenuBtn) editMenuBtn.onclick = () => { 
-        window.openMenuManager(); 
+        state.sheet='manage-menu';
+        window.renderMenuManagerSheet(); 
       };
       
       shell.querySelectorAll('[data-quick-order]').forEach(el => {
@@ -996,7 +990,12 @@
     if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
     
     const list = getActiveList();
-    const vId = list.selectedVenueId;
+    if (!list) { closeSheet(); return; }
+
+    if (!menuState.venueId && list.venues && list.venues.length > 0) {
+       menuState.venueId = list.selectedVenueId || list.venues[0].id;
+    }
+
     const v = list.venues.find(x => x.id === menuState.venueId);
     if (!v) { closeSheet(); return; }
 
@@ -1013,8 +1012,8 @@
           <span>${escapeHtml(d.emoji)} ${escapeHtml(d.name)}</span>
           <span class="lt-mono" style="color:var(--text-muted)">${d.price ? fmtPlain(d.price)+'€' : '–'}</span>
         </div>
-        <button class="lt-icon-btn" onclick="window.setEditDishId('${d.id}')">✏️</button>
-        <button class="lt-icon-btn" onclick="window.deleteDishFromMenu('${v.id}', '${d.id}')">🗑️</button>
+        <button class="lt-icon-btn" data-edit-dish="${d.id}">✏️</button>
+        <button class="lt-icon-btn" data-del-dish="${d.id}">🗑️</button>
       </div>
     `).join('');
 
@@ -1065,6 +1064,19 @@
           }
       }
     };
+
+    overlay.querySelectorAll('[data-edit-dish]').forEach(btn => {
+      btn.onclick = () => {
+        menuState.editDishId = btn.getAttribute('data-edit-dish');
+        window.renderMenuManagerSheet();
+      };
+    });
+
+    overlay.querySelectorAll('[data-del-dish]').forEach(btn => {
+      btn.onclick = () => {
+        window.deleteDishFromMenu(v.id, btn.getAttribute('data-del-dish'));
+      };
+    });
   }
 
   window.renderAddOrderSheet = function() {
@@ -1092,14 +1104,7 @@
     document.getElementById('btn-save-o').onclick = async () => {
       const n = document.getElementById('lt-o-name').value;
       if(n) {
-          const list = getActiveList();
-          const myId = state.me[state.activeListId];
-          const existingIdx = list.orders.findIndex(o => o.personId === myId);
-          const price = parseFloat(String(document.getElementById('lt-o-price').value).replace(',', '.'));
-          const payload = { id: uid(), personId: myId, emoji: document.getElementById('lt-o-em').value || '🍽️', dish: n.trim(), note: document.getElementById('lt-o-note').value.trim(), price: isNaN(price) ? null : price };
-          if (existingIdx >= 0) list.orders[existingIdx] = payload; else list.orders.push(payload);
-          list.isCheckedOut = false; // Zurücksetzen, falls geändert
-          await saveData(); closeSheet(); render();
+          window.addOrUpdateOrder(document.getElementById('lt-o-em').value, n, document.getElementById('lt-o-note').value, document.getElementById('lt-o-price').value);
       }
     };
   }
