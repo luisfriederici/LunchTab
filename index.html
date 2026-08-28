@@ -78,7 +78,6 @@
 .lt-balance-amt.pos { color: var(--positive); }
 .lt-balance-amt.neg { color: var(--negative); }
 .lt-balance-amt.zero { color: var(--text-muted); }
-.lt-balance-hint { font-size: 10px; color: var(--text-muted); display: block; text-align: right; margin-top: 1px; }
 .lt-chevron { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; margin-left: 8px; }
 .lt-chevron.open { transform: rotate(180deg); color: var(--accent); }
 
@@ -91,6 +90,8 @@
 .lt-settle-slider-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); z-index: 1; pointer-events: none; }
 .lt-settle-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 100%; background: transparent; margin: 0; outline: none; position: relative; z-index: 2; }
 .lt-settle-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 36px; border-radius: 18px; background: var(--accent); cursor: pointer; box-shadow: inset -2px 0 4px rgba(0,0,0,0.15); }
+.lt-paypal-btn { background: #0079C1; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; transition: opacity 0.2s; }
+.lt-paypal-btn:active { opacity: 0.8; }
 
 /* Voting UI */
 .lt-voting-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 8px; }
@@ -153,9 +154,8 @@
 .lt-split-toggle button { flex: 1; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); padding: 9px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .lt-split-toggle button.active { background: var(--accent); color: #1a1200; border-color: var(--accent); }
 .lt-participant-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
-.lt-participant-row label { flex: 1; font-size: 14px; display: flex; align-items: flex-start; gap: 8px; }
+.lt-participant-row label { flex: 1; font-size: 14px; display: flex; align-items: flex-start; gap: 8px; pointer-events: none; }
 .lt-participant-amt { width: 84px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-align: right; }
-.lt-split-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 13px; }
 
 /* Color Picker */
 .lt-color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; box-sizing: border-box; transition: transform 0.2s; }
@@ -250,6 +250,11 @@
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
+  function getPayPalLink(ppStr, amount) {
+    if (!ppStr) return '';
+    let clean = ppStr.replace(/https?:\/\/(www\.)?paypal\.me\//g, '').replace('@', '').trim();
+    return `https://paypal.me/${clean}/${amount.toFixed(2)}`;
+  }
 
   // --- Daten laden (Cloud oder Lokal) ---
   async function loadAll() {
@@ -319,7 +324,7 @@
     name = (name || '').trim(); if (!name) return;
     const list = getActiveList();
     let person = list.people.find(p => p.name.toLowerCase() === name.toLowerCase());
-    if (!person) { person = { id: uid(), name }; list.people.push(person); }
+    if (!person) { person = { id: uid(), name, paypal: '' }; list.people.push(person); }
     state.me[state.activeListId] = person.id;
     await saveData(); render();
   }
@@ -373,7 +378,9 @@
     const d = v.menu.find(x => x.id === dishId);
     if(!d) return;
     const p = parseFloat(String(priceStr).replace(',', '.'));
-    d.emoji = emoji || '🍽️'; d.name = name.trim(); d.price = isNaN(p) ? null : p;
+    d.emoji = emoji || '🍽️';
+    d.name = name.trim();
+    d.price = isNaN(p) ? null : p;
     menuState.editDishId = null;
     await saveData(); window.renderMenuManagerSheet(); 
   }
@@ -388,7 +395,7 @@
     const price = parseFloat(String(priceStr).replace(',', '.'));
     const payload = { id: uid(), personId: myId, emoji: emoji || '🍽️', dish: dishName.trim(), note: (note || '').trim(), price: isNaN(price) ? null : price };
     if (existingIdx >= 0) list.orders[existingIdx] = payload; else list.orders.push(payload);
-    list.isCheckedOut = false; 
+    list.isCheckedOut = false; // Reset checkout status if order changes
     await saveData(); closeSheet(); render();
   }
   window.deleteOrder = async function(orderId) {
@@ -420,8 +427,7 @@
       customAmounts: customAmts,
       isCheckout: true
     };
-    state.sheet = 'add-expense'; 
-    window.renderAddExpenseSheet(); 
+    state.sheet = 'add-expense'; renderAddExpenseSheet(); 
   }
   window.undoCheckout = async function() {
     if (confirm("Bestellung wieder freigeben?\n(Hinweis: Die bereits erstellte Abrechnung bleibt im Verlauf erhalten und muss bei Bedarf manuell gelöscht werden.)")) {
@@ -684,9 +690,21 @@
         if (isExpanded) {
           const sItems = mySets.map(s => {
             let t = '', st = '';
-            if (s.from === p.id) { t = p.id===me.id ? `Du schuldest ${escapeHtml(personName(s.to, people))}` : `${escapeHtml(p.name)} schuldet ${escapeHtml(personName(s.to, people))}`; st = 'Geld bezahlt ➔'; } 
-            else { t = p.id===me.id ? `${escapeHtml(personName(s.from, people))} schuldet dir` : `${escapeHtml(personName(s.from, people))} schuldet ${escapeHtml(p.name)}`; st = 'Geld erhalten ➔'; }
-            return `<div class="lt-debt-item"><div class="lt-debt-info"><span>${t}</span><span class="lt-mono" style="font-weight:600;">${fmtPlain(s.amount)} €</span></div><div class="lt-settle-slider-wrap"><div class="lt-settle-slider-text">${st}</div><input type="range" min="0" max="100" value="0" class="lt-settle-slider" data-from="${s.from}" data-to="${s.to}" data-amount="${s.amount}" /></div></div>`;
+            const receiver = people.find(x => x.id === s.to);
+            const payer = people.find(x => x.id === s.from);
+            let paypalBtn = '';
+
+            if (s.from === p.id) { 
+               t = p.id===me.id ? `Du schuldest ${escapeHtml(receiver.name)}` : `${escapeHtml(p.name)} schuldet ${escapeHtml(receiver.name)}`; 
+               st = 'Geld bezahlt ➔'; 
+               if (receiver.paypal && p.id === me.id) {
+                   paypalBtn = `<a href="${getPayPalLink(receiver.paypal, s.amount)}" target="_blank" class="lt-paypal-btn">PayPal</a>`;
+               }
+            } else { 
+               t = p.id===me.id ? `${escapeHtml(payer.name)} schuldet dir` : `${escapeHtml(payer.name)} schuldet ${escapeHtml(p.name)}`; 
+               st = 'Geld erhalten ➔'; 
+            }
+            return `<div class="lt-debt-item"><div class="lt-debt-info"><span>${t}</span><div style="display:flex; align-items:center; gap:6px;">${paypalBtn}<span class="lt-mono" style="font-weight:600;">${fmtPlain(s.amount)} €</span></div></div><div class="lt-settle-slider-wrap"><div class="lt-settle-slider-text">${st}</div><input type="range" min="0" max="100" value="0" class="lt-settle-slider" data-from="${s.from}" data-to="${s.to}" data-amount="${s.amount}" /></div></div>`;
           }).join('');
           sHTML = `<div class="lt-debt-list">${mySets.length===0 ? '<div class="lt-debt-empty">Alles ausgeglichen!</div>' : sItems}</div>`;
         }
@@ -794,7 +812,7 @@
 
       shell.querySelectorAll('[data-toggle-person]').forEach(el => {
         el.onclick = (e) => {
-            if(e.target.closest('.lt-settle-slider')) return;
+            if(e.target.closest('.lt-settle-slider') || e.target.closest('.lt-paypal-btn')) return;
             const pid = el.getAttribute('data-toggle-person');
             if (state.expandedPeople.has(pid)) state.expandedPeople.delete(pid); else state.expandedPeople.add(pid);
             render();
@@ -977,8 +995,17 @@
     };
   }
 
-  // --- Ausgabe (Add Expense) ohne Focus Loss ---
+  // Das dynamische Abrechnungsformular mit rocksolidem Focus-Handling
   window.renderAddExpenseSheet = function() {
+    const activeEl = document.activeElement;
+    const focusState = activeEl ? {
+      id: activeEl.id,
+      customId: activeEl.getAttribute('data-am-id'),
+      cbId: activeEl.getAttribute('data-cb'),
+      start: activeEl.selectionStart,
+      end: activeEl.selectionEnd
+    } : null;
+
     let overlay = document.getElementById('lt-overlay') || document.createElement('div');
     overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
     if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
@@ -1017,6 +1044,8 @@
 
         // Update Rows
         people.forEach(p => {
+            const row = document.getElementById(`row-${p.id}`);
+            if(!row) return;
             const cb = document.getElementById(`cb-${p.id}`);
             const isChecked = sheetState.selected.has(p.id);
             if(cb) cb.checked = isChecked;
@@ -1031,6 +1060,7 @@
                     if (rightSide.firstChild && rightSide.firstChild.tagName === 'INPUT') {
                         const inp = rightSide.firstChild;
                         inp.disabled = !isChecked;
+                        // Only set value if not currently focused
                         if (document.activeElement !== inp) inp.value = inputVal;
                     } else {
                         rightSide.innerHTML = `<input class="lt-participant-amt" data-am-id="${p.id}" value="${inputVal}" placeholder="0,00" inputmode="decimal" ${dis} />`;
@@ -1060,12 +1090,12 @@
           if (sheetState.isCheckout) {
              const pOrders = listOrders.filter(o => o.personId === p.id);
              if (pOrders.length > 0) {
-                 orderHint = `<div style="font-size:11px; color:var(--text-muted); font-weight:normal; margin-top:2px;">${pOrders.map(o => o.emoji + ' ' + o.dish).join(', ')}</div>`;
+                 orderHint = `<div style="font-size:11px; color:var(--text-muted); font-weight:normal; margin-top:2px;">${pOrders.map(o => o.emoji + ' ' + escapeHtml(o.dish)).join(', ')}</div>`;
              }
           }
 
           return `
-            <div class="lt-participant-row" data-toggle-cb="${p.id}" style="align-items:flex-start; padding: 10px 0; border-bottom: 1px dashed var(--border);">
+            <div class="lt-participant-row" id="row-${p.id}" data-toggle-cb="${p.id}" style="align-items:flex-start; padding: 10px 0; border-bottom: 1px dashed var(--border);">
               <div style="flex:1; display:flex; align-items:flex-start; gap:8px;">
                  <input type="checkbox" id="cb-${p.id}" style="pointer-events:none; margin-top:2px;" />
                  <span class="lt-avatar" style="background:${colorFor(p.id, people)}">${initials(p.name)}</span> 
@@ -1085,7 +1115,7 @@
             <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; font-size: 15px; color: var(--text); opacity: 0.8; margin-bottom: 14px;">
               ${escapeHtml(personName(sheetState.payerId, people))}
             </div>
-            <div class="lt-field-label">Gesamtbetrag ${sheetState.splitType === 'custom' ? '(Auto-Berechnet)' : ''}</div>
+            <div class="lt-field-label">Gesamtbetrag <span id="auto-calc-label"></span></div>
             <input class="lt-input lt-amount-input" id="lt-exp-amt" value="${sheetState.amount}" inputmode="decimal" placeholder="0,00 €" />
             <div class="lt-field-label">Wofür?</div>
             <input class="lt-input" id="lt-exp-note" value="${escapeHtml(sheetState.note)}" placeholder="z. B. Mittagessen" />
@@ -1111,9 +1141,10 @@
         document.getElementById('btn-split-cu').onclick = () => { sheetState.splitType = 'custom'; updateDOM(); };
         document.getElementById('btn-cancel-exp').onclick = closeSheet;
 
+        // Custom Row Click (toggle check)
         overlay.querySelectorAll('[data-toggle-cb]').forEach(row => {
           row.onclick = (e) => {
-              if(e.target.tagName === 'INPUT' && e.target.type === 'text') return; 
+              if(e.target.tagName === 'INPUT' && e.target.type === 'text') return; // Ignore input clicks
               const id = row.getAttribute('data-toggle-cb');
               if (sheetState.selected.has(id)) sheetState.selected.delete(id); else sheetState.selected.add(id);
               updateDOM();
@@ -1144,7 +1175,24 @@
           await saveData(); closeSheet(); render(); 
         };
     }
+
+    // Call updateDOM to sync the values with UI
     updateDOM();
+    
+    // Focus-State wiederherstellen
+    if (focusState) {
+      let elToFocus = null;
+      if (focusState.id) elToFocus = document.getElementById(focusState.id);
+      else if (focusState.customId) elToFocus = overlay.querySelector(`[data-am-id="${focusState.customId}"]`);
+      else if (focusState.cbId) elToFocus = overlay.querySelector(`[data-cb="${focusState.cbId}"]`);
+      
+      if (elToFocus) {
+        elToFocus.focus();
+        if (typeof focusState.start === 'number' && elToFocus.type !== 'checkbox') {
+          try { elToFocus.setSelectionRange(focusState.start, focusState.end); } catch(e) {}
+        }
+      }
+    }
   }
 
   // --- Neuer "Personen Manager & Switcher" ---
@@ -1189,7 +1237,7 @@
     document.getElementById('btn-add-new-person').onclick = async () => {
       const name = document.getElementById('inp-add-new-person').value.trim();
       if(name && !people.find(p=>p.name.toLowerCase()===name.toLowerCase())){
-        activeList.people.push({ id: uid(), name });
+        activeList.people.push({ id: uid(), name, paypal: '' });
         await saveData();
         window.renderPeopleManagerSheet(); // refresh
       }
@@ -1238,6 +1286,9 @@
         
         <div class="lt-field-label">Name</div>
         <input class="lt-input" id="lt-edit-person-name" value="${escapeHtml(person.name)}" />
+
+        <div class="lt-field-label">PayPal.me Name (optional)</div>
+        <input class="lt-input" id="lt-edit-person-paypal" value="${escapeHtml(person.paypal || '')}" placeholder="z.B. maxmuster" />
         
         <div class="lt-field-label">Avatar Farbe</div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 16px;">
@@ -1270,8 +1321,10 @@
 
     document.getElementById('btn-save-ep').onclick = async () => { 
       const n = document.getElementById('lt-edit-person-name').value.trim();
+      const pp = document.getElementById('lt-edit-person-paypal').value.trim();
       if(n){ 
         person.name = n; 
+        person.paypal = pp;
         person.color = state.editPersonColor;
         state.editPersonColor = null;
         await saveData(); 
