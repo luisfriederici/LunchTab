@@ -78,6 +78,1475 @@
 .lt-balance-amt.pos { color: var(--positive); }
 .lt-balance-amt.neg { color: var(--negative); }
 .lt-balance-amt.zero { color: var(--text-muted); }
+.lt-balance-hint { font-size: 10px; color: var(--text-muted); display: block; text-align: right; margin-top: 1px; }
+.lt-chevron { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; margin-left: 8px; }
+.lt-chevron.open { transform: rotate(180deg); color: var(--accent); }
+
+/* Debts & Swipes */
+.lt-debt-list { border-top: 1px dashed var(--border); padding: 14px; background: var(--surface-2); display: flex; flex-direction: column; gap: 14px; }
+.lt-debt-empty { border-top: 1px dashed var(--border); padding: 14px; background: var(--surface-2); font-size: 13px; color: var(--text-muted); text-align: center; }
+.lt-debt-item { display: flex; flex-direction: column; gap: 8px; }
+.lt-debt-info { display: flex; justify-content: space-between; font-size: 13px; }
+.lt-settle-slider-wrap { position: relative; width: 100%; height: 38px; background: #161b22; border: 1px solid var(--border); border-radius: 19px; overflow: hidden; }
+.lt-settle-slider-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); z-index: 1; pointer-events: none; }
+.lt-settle-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 100%; background: transparent; margin: 0; outline: none; position: relative; z-index: 2; }
+.lt-settle-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 36px; border-radius: 18px; background: var(--accent); cursor: pointer; box-shadow: inset -2px 0 4px rgba(0,0,0,0.15); }
+.lt-paypal-btn { background: #0079C1; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; transition: opacity 0.2s; }
+.lt-paypal-btn:active { opacity: 0.8; }
+
+/* Voting UI */
+.lt-voting-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 8px; }
+.lt-voting-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.lt-voting-card-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 10px; }
+.lt-voter-avatars { display: flex; margin-left: 6px; }
+.lt-voter-avatars .lt-avatar { border: 2px solid var(--surface); margin-left: -6px; }
+
+/* Order UI */
+.lt-order-summary-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
+.lt-order-summary-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 10px; display:flex; justify-content:space-between;}
+.lt-order-summary-item { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; border-bottom: 1px dashed var(--border); }
+.lt-order-summary-item:last-child { border-bottom: none; }
+.lt-order-item-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+
+/* Menu Editor */
+.lt-menu-edit-item { display: flex; align-items: center; gap: 8px; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
+.lt-menu-edit-info { flex: 1; display:flex; justify-content:space-between; align-items:center; font-size: 14px; }
+
+/* Common UI */
+.lt-monthnav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px 6px; margin-bottom: 18px; }
+.lt-monthnav button { background: none; border: none; color: var(--text-muted); font-size: 18px; padding: 6px 12px; cursor: pointer; border-radius: 8px; line-height: 1; font-family: inherit; }
+.lt-monthnav .lt-monthlabel { font-weight: 600; font-size: 14px; font-family: 'Space Grotesk', sans-serif; text-transform: capitalize; }
+.lt-monthnav .lt-all-toggle { font-size: 11px; color: var(--teal); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+.lt-fab { position: fixed; bottom: 24px; right: 20px; width: 56px; height: 56px; background: var(--accent); color: #1a1200; border: none; border-radius: 50%; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 32px; cursor: pointer; box-shadow: 0 8px 24px rgba(231,168,60,0.4); display: flex; align-items: center; justify-content: center; z-index: 40; line-height: 1; transition: transform 0.2s; }
+.lt-fab:active { transform: scale(0.93); }
+
+.lt-action-btn { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); font-size: 11px; cursor: pointer; padding: 6px 10px; font-family: inherit; font-weight: 500; transition: color 0.2s; }
+.lt-action-btn.active { background: var(--accent); color: #1a1200; border-color: var(--accent); }
+.lt-icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 4px; border-radius: 4px; }
+.lt-icon-btn:hover { color: var(--text); background: var(--surface-2); }
+.lt-del-btn { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); font-size: 11px; cursor: pointer; padding: 6px 10px; font-family: inherit; }
+.lt-del-btn:hover { color: var(--negative); border-color: var(--negative); background: #e4746b1a; }
+.lt-existing-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text); }
+.lt-input, .lt-select { width: 100%; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 11px 12px; font-size: 15px; font-family: 'Inter', sans-serif; }
+.lt-btn-primary { width: 100%; background: var(--accent); border: none; color: #1a1200; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
+.lt-btn-secondary { width: 100%; background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+/* History filters & items */
+.lt-history-filters { display: flex; gap: 8px; margin-bottom: 12px; }
+.lt-history-filter-select { flex: 1; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; outline: none; }
+.lt-history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; position: relative; overflow: hidden; }
+.lt-history-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--hist-color, var(--accent)); }
+.lt-history-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 13px 14px; cursor: pointer; }
+.lt-history-details { padding: 0 14px 13px 14px; display: none; }
+.lt-history-details.open { display: block; }
+
+/* Modals */
+.lt-overlay { position: fixed; inset: 0; background: rgba(8,10,14,0.6); display: flex; align-items: flex-end; justify-content: center; z-index: 100; backdrop-filter: blur(2px); }
+.lt-sheet { width: 100%; max-width: 480px; background: var(--surface); border-radius: 20px 20px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom, 0px)); max-height: 88vh; overflow-y: auto; border-top: 1px solid var(--border); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
+.lt-sheet-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 16px; }
+.lt-field-label { font-size: 12px; color: var(--text-muted); margin: 14px 0 6px; font-weight: 500; }
+.lt-empty { text-align: center; padding: 40px 16px; color: var(--text-muted); font-size: 13px; border: 1px dashed var(--border); border-radius: 12px; line-height: 1.5; }
+.lt-error-banner { background: #e4746b1a; border: 1px solid var(--negative); color: var(--negative); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-bottom: 14px; line-height: 1.4; }
+
+/* Add/Expense Sheet Specific */
+.lt-amount-input { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600; }
+.lt-split-toggle { display: flex; gap: 8px; }
+.lt-split-toggle button { flex: 1; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); padding: 9px; border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.lt-split-toggle button.active { background: var(--accent); color: #1a1200; border-color: var(--accent); }
+.lt-participant-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
+.lt-participant-row label { flex: 1; font-size: 14px; display: flex; align-items: flex-start; gap: 8px; pointer-events: none; }
+.lt-participant-amt { width: 84px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 7px 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-align: right; }
+.lt-split-total { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 13px; }
+
+/* Color Picker */
+.lt-color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; box-sizing: border-box; transition: transform 0.2s; }
+.lt-color-swatch:hover { transform: scale(1.1); }
+
+/* Onboarding */
+.lt-onboard { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+.lt-onboard-title { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+</style>
+</head>
+<body>
+
+<div id="lunchtab-root"><div class="lt-shell" id="lt-shell"><div class="lt-loading">Lade …</div></div></div>
+
+<script>
+(function() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyAe5hki3AkRCf7Uw1ykUR_26i4tEgO1_Y4",
+    authDomain: "lunchtab-2f5fc.firebaseapp.com",
+    projectId: "lunchtab-2f5fc",
+    storageBucket: "lunchtab-2f5fc.firebasestorage.app",
+    messagingSenderId: "345653859117",
+    appId: "1:345653859117:web:b7dcae7acb2727281b79a4"
+  };
+
+  let db = null;
+  let useCloud = false;
+
+  try {
+    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "HIER_API_KEY_EINFÜGEN") {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+      useCloud = true;
+    }
+  } catch(e) { console.warn("Firebase Init fehlgeschlagen", e); }
+
+  const shell = document.getElementById('lt-shell');
+  const AVATAR_COLORS = [
+    '#e7a83c', '#4fa6a0', '#c97bb0', '#7c93d6', '#8fc28a', '#e4746b', '#d9c15a', '#5fb0c9',
+    '#f28b82', '#a371f7', '#11a681', '#39c5bb', '#ff7b72', '#f0883e', '#79c0ff', '#d2a8ff'
+  ];
+  
+  const LISTS_KEY = 'lunchtab-lists-v6';
+  const ME_KEY = 'lunchtab-me-v6';
+
+  // --- MÜNSTER INSPIRATION (Bogenstraße & City) ---
+  const LUNCH_POOL = {
+    "Italienisch & Pasta 🍝": ["Marias Pastabar", "Mocca d'or", "Pasta e Basta", "L'Osteria", "Vapiano", "Pizzeria Lido", "481 Pizzamanufaktur"],
+    "Bowls & Healthy 🥗": ["Beetschwester", "Krawummel", "Green Panda", "Dean & David", "Açaí", "Royals & Rice"],
+    "Wraps & Orientalisch 🥙": ["Olea", "Gustav Grün", "Kulti Kebab", "Macho Meat", "Ali Baba", "Syal"],
+    "Schnell & Einfach 🌭": ["Rewe Salatbar", "Hot Dog Station", "Tollkühn", "Nordsee", "Subway", "Bäcker Krimphove", "Roestbar"]
+  };
+
+  const INSPIRATION_MENUS = {
+    "Marias Pastabar": [
+      { emoji: '🍝', name: 'Pasta Carbonara', price: 9.50 },
+      { emoji: '🍅', name: 'Pasta Pomodoro', price: 8.50 },
+      { emoji: '🌿', name: 'Pasta Pesto', price: 8.00 }
+    ],
+    "Olea": [
+      { emoji: '🥙', name: 'Falafel Teller', price: 8.00 },
+      { emoji: '🌯', name: 'Halloumi Wrap', price: 7.50 }
+    ],
+    "Beetschwester": [
+      { emoji: '🥑', name: 'Avocado Bowl', price: 11.00 },
+      { emoji: '🥗', name: 'Quinoa Power Bowl', price: 12.00 }
+    ],
+    "Rewe Salatbar": [
+      { emoji: '🥗', name: 'Salatbar Groß', price: 5.50 },
+      { emoji: '🥪', name: 'Sandwich', price: 3.50 }
+    ],
+    "Gustav Grün": [
+      { emoji: '🌯', name: 'Gustavs Rolle', price: 7.90 },
+      { emoji: '🥗', name: 'Gustavs Box', price: 8.90 }
+    ],
+    "Mocca d'or": [
+      { emoji: '🍕', name: 'Pizza Margherita', price: 9.00 },
+      { emoji: '🍕', name: 'Pizza Salami', price: 10.50 }
+    ],
+    "Krawummel": [
+      { emoji: '🥙', name: 'Falafel Wrap', price: 7.90 },
+      { emoji: '🧁', name: 'Cupcake', price: 3.50 }
+    ],
+    "Pasta e Basta": [
+      { emoji: '🍝', name: 'Pasta Mista', price: 9.50 }
+    ],
+    "Roestbar": [
+      { emoji: '☕', name: 'Cappuccino', price: 3.80 },
+      { emoji: '🥐', name: 'Croissant', price: 2.50 }
+    ]
+  };
+
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function getRandomItems(arr, num) {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, num);
+  }
+
+  let state = {
+    lists: [],          
+    activeListId: null, 
+    me: {},             
+    activeTab: 'voting', 
+    viewMonth: new Date().toISOString().slice(0,7),
+    showAll: false,
+    expandedPeople: new Set(), 
+    expandedHistory: new Set(), 
+    historyFilter: { person: 'all', type: 'all' }, 
+    showHistory: false,
+    error: null,
+    sheet: null,
+    editPersonColor: null, 
+    inspView: {} // Speichert die aktuellen 2 Vorschläge pro Kategorie
+  };
+
+  // Init Inspiration View
+  for (const cat in LUNCH_POOL) {
+    state.inspView[cat] = getRandomItems(LUNCH_POOL[cat], 2);
+  }
+
+  let menuState = { venueId: null, editDishId: null };
+
+  function colorFor(personId, people) {
+    if (!Array.isArray(people)) return AVATAR_COLORS[0];
+    const p = people.find(x => x.id === personId);
+    if (p && p.color) return p.color;
+    const idx = people.findIndex(p => p.id === personId);
+    return AVATAR_COLORS[(idx >= 0 ? idx : 0) % AVATAR_COLORS.length];
+  }
+  function initials(name) { return (name || '?').trim().slice(0,2).toUpperCase(); }
+  function fmtPlain(n) { return Number(n).toFixed(2).replace('.', ','); }
+  function fmt(n) { const sign = n < 0 ? '-' : (n > 0 ? '+' : ''); return sign + Math.abs(n).toFixed(2).replace('.', ',') + ' €'; }
+  function monthLabel(ym) {
+    const [y,m] = ym.split('-').map(Number);
+    return new Date(y, m-1, 1).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+  }
+  function shiftMonth(ym, delta) {
+    const [y,m] = ym.split('-').map(Number);
+    const d = new Date(y, m-1+delta, 1);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+  }
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function getPayPalLink(ppStr, amount) {
+    if (!ppStr) return '';
+    let clean = ppStr.replace(/https?:\/\/(www\.)?paypal\.me\//g, '').replace('@', '').trim();
+    return `https://paypal.me/${clean}/${amount.toFixed(2)}`;
+  }
+
+  // --- Daten laden (Cloud oder Lokal) ---
+  async function loadAll() {
+    try {
+      if (useCloud && db) {
+        db.collection("lunchtab").doc("global_data").onSnapshot((doc) => {
+          if (doc.exists) {
+            const cloudData = doc.data();
+            if (cloudData.lists) state.lists = cloudData.lists;
+          }
+          renderIfNeeded();
+        }, (err) => { console.error("Firestore error", err); loadLocal(); });
+      } else {
+        loadLocal();
+      }
+      
+      const meRes = localStorage.getItem(ME_KEY) || localStorage.getItem('lunchtab-me-v5');
+      if (meRes) {
+        const parsedMe = JSON.parse(meRes);
+        if (parsedMe && typeof parsedMe === 'object' && !Array.isArray(parsedMe)) state.me = parsedMe;
+      }
+      state.error = null;
+    } catch (e) { state.error = 'Fehler beim Laden.'; render(); }
+  }
+
+  function loadLocal() {
+    const localData = localStorage.getItem(LISTS_KEY) || localStorage.getItem('lunchtab-lists-v5');
+    if (localData) state.lists = JSON.parse(localData);
+    render();
+  }
+
+  let renderLock = false;
+  function renderIfNeeded() { if(!renderLock) render(); }
+
+  async function saveData() {
+    try {
+      localStorage.setItem(LISTS_KEY, JSON.stringify(state.lists));
+      localStorage.setItem(ME_KEY, JSON.stringify(state.me));
+
+      if (useCloud && db) {
+        renderLock = true;
+        await db.collection("lunchtab").doc("global_data").set({ lists: state.lists });
+        renderLock = false;
+      }
+      state.error = null;
+    } catch (e) { state.error = 'Speichern fehlgeschlagen.'; renderLock = false; }
+  }
+
+  function getActiveList() { return state.lists.find(l => l.id === state.activeListId); }
+
+  // --- Basics ---
+  async function createNewList(name) {
+    name = (name || '').trim(); if (!name) return;
+    state.lists.push({ id: uid(), name, people: [], expenses: [], venues: [], selectedVenueId: null, orders: [], isCheckedOut: false });
+    state.activeListId = state.lists[state.lists.length-1].id; state.activeTab = 'voting';
+    await saveData(); render();
+  }
+  async function deleteList(id) {
+    state.lists = state.lists.filter(l => l.id !== id);
+    delete state.me[id];
+    if (state.activeListId === id) state.activeListId = null;
+    await saveData(); render();
+  }
+  async function onboard(name) {
+    name = (name || '').trim(); if (!name) return;
+    const list = getActiveList();
+    let person = list.people.find(p => p.name.toLowerCase() === name.toLowerCase());
+    if (!person) { person = { id: uid(), name, paypal: '' }; list.people.push(person); }
+    state.me[state.activeListId] = person.id;
+    await saveData(); render();
+  }
+
+  // --- Tab 1: Abstimmung (Venues) ---
+  window.addVenue = async function(name) {
+    name = (name || '').trim(); if (!name) return;
+    const list = getActiveList();
+    if (!list.venues) list.venues = [];
+    const existing = list.venues.find(v => v.name.toLowerCase() === name.toLowerCase());
+    const myId = state.me[state.activeListId];
+    if (existing) {
+      if (!existing.voters.includes(myId)) existing.voters.push(myId);
+    } else {
+      let initialMenu = [];
+      if (INSPIRATION_MENUS[name]) {
+         initialMenu = INSPIRATION_MENUS[name].map(m => ({ id: uid(), emoji: m.emoji, name: m.name, price: m.price }));
+      }
+      list.venues.push({ id: uid(), name, voters: [myId], menu: initialMenu });
+    }
+    await saveData(); render();
+  }
+  window.editVenueName = async function(vId) {
+    const v = getActiveList().venues.find(x => x.id === vId);
+    const newName = prompt("Lokal umbenennen:", v.name);
+    if (newName && newName.trim()) { v.name = newName.trim(); await saveData(); render(); }
+  }
+  window.deleteVenue = async function(vId) {
+    if(confirm("Lokal und dazugehörige Speisekarte wirklich löschen?")) {
+      const list = getActiveList();
+      list.venues = list.venues.filter(x => x.id !== vId);
+      if(list.selectedVenueId === vId) { list.selectedVenueId = null; }
+      await saveData(); render();
+    }
+  }
+  window.toggleVoteVenue = async function(vId) {
+    const v = getActiveList().venues.find(x => x.id === vId);
+    if (!v) return;
+    const myId = state.me[state.activeListId];
+    if (v.voters.includes(myId)) v.voters = v.voters.filter(x => x !== myId);
+    else v.voters.push(myId);
+    await saveData(); render();
+  }
+  window.lockVenue = async function(vId) {
+    const list = getActiveList();
+    if (list.selectedVenueId === vId) list.selectedVenueId = null; 
+    else { list.selectedVenueId = vId; } 
+    await saveData(); render();
+  }
+
+  // --- Tab 2: Bestellung ---
+  window.setEditDishId = function(dishId) {
+    menuState.editDishId = dishId;
+    window.renderMenuManagerSheet();
+  };
+  window.addDishToMenu = async function(venueId, emoji, name, priceStr) {
+    const list = getActiveList();
+    const v = list.venues.find(x => x.id === venueId);
+    if(!v) return;
+    const p = parseFloat(String(priceStr).replace(',', '.'));
+    v.menu.push({ id: uid(), emoji: emoji || '🍽️', name: name.trim(), price: isNaN(p) ? null : p });
+    await saveData(); window.renderMenuManagerSheet(); 
+  }
+  window.editDishInMenu = async function(venueId, dishId, emoji, name, priceStr) {
+    const list = getActiveList();
+    const v = list.venues.find(x => x.id === venueId);
+    if(!v) return;
+    const d = v.menu.find(x => x.id === dishId);
+    if(!d) return;
+    const p = parseFloat(String(priceStr).replace(',', '.'));
+    d.emoji = emoji || '🍽️';
+    d.name = name.trim();
+    d.price = isNaN(p) ? null : p;
+    menuState.editDishId = null;
+    await saveData(); window.renderMenuManagerSheet(); 
+  }
+  window.deleteDishFromMenu = async function(venueId, dishId) {
+    const v = getActiveList().venues.find(x => x.id === venueId);
+    if (v) { v.menu = v.menu.filter(d => d.id !== dishId); await saveData(); window.renderMenuManagerSheet(); }
+  }
+  window.addOrUpdateOrder = async function(emoji, dishName, note, priceStr) {
+    const list = getActiveList();
+    const myId = state.me[state.activeListId];
+    const existingIdx = list.orders.findIndex(o => o.personId === myId);
+    const price = parseFloat(String(priceStr).replace(',', '.'));
+    const payload = { id: uid(), personId: myId, emoji: emoji || '🍽️', dish: dishName.trim(), note: (note || '').trim(), price: isNaN(price) ? null : price };
+    if (existingIdx >= 0) list.orders[existingIdx] = payload; else list.orders.push(payload);
+    list.isCheckedOut = false; 
+    await saveData(); closeSheet(); render();
+  }
+  window.deleteOrder = async function(orderId) {
+    const list = getActiveList(); 
+    list.orders = list.orders.filter(o => o.id !== orderId);
+    list.isCheckedOut = false;
+    await saveData(); render();
+  }
+  window.initiateCheckout = function() {
+    const list = getActiveList();
+    let customAmts = {}; let parts = new Set();
+    list.orders.forEach(o => {
+      const p = parseFloat(o.price) || 0; 
+      customAmts[o.personId] = (customAmts[o.personId] || 0) + p;
+      parts.add(o.personId);
+    });
+    for (let pid in customAmts) customAmts[pid] = fmtPlain(customAmts[pid]);
+    
+    let sum = 0; Array.from(parts).forEach(pid => sum += parseFloat((customAmts[pid] || '0').replace(',', '.')) || 0);
+
+    const v = list.venues.find(x => x.id === list.selectedVenueId);
+    sheetState = {
+      editId: null, payerId: state.me[state.activeListId],
+      amount: sum > 0 ? fmtPlain(sum) : '0,00',
+      note: `Mittagessen${v ? ' bei '+v.name : ''}`,
+      date: new Date().toISOString().slice(0,10),
+      splitType: 'custom',
+      selected: parts.size > 0 ? parts : new Set([state.me[state.activeListId]]),
+      customAmounts: customAmts,
+      isCheckout: true
+    };
+    state.sheet = 'add-expense'; renderAddExpenseSheet(); 
+  }
+  window.undoCheckout = async function() {
+    if (confirm("Bestellung wieder freigeben?\n(Hinweis: Die bereits erstellte Abrechnung bleibt im Verlauf erhalten und muss bei Bedarf manuell gelöscht werden.)")) {
+        const list = getActiveList();
+        list.isCheckedOut = false;
+        await saveData();
+        render();
+    }
+  }
+  window.resetDay = async function() {
+    if(!confirm("Einträge von heute (Stimmen, Ziel, Bestellungen) leeren für den nächsten Tag?")) return;
+    const list = getActiveList();
+    list.orders = [];
+    list.selectedVenueId = null;
+    list.venues.forEach(v => v.voters = []);
+    list.isCheckedOut = false;
+    state.activeTab = 'voting';
+    await saveData(); render();
+  }
+
+  // --- Tab 3: Abrechnung ---
+  window.deleteExpense = async function(id) {
+    const list = getActiveList(); list.expenses = list.expenses.filter(e => e.id !== id);
+    await saveData(); render();
+  }
+  window.settleDebt = async function(fromId, toId, amount) {
+    const list = getActiveList();
+    list.expenses.push({ id: uid(), date: new Date().toISOString().slice(0,10), payerId: fromId, amount: Math.round(amount * 100) / 100, note: 'Schuldenausgleich', participants: [{ personId: toId, amount: Math.round(amount * 100) / 100 }], createdAt: Date.now().toString() });
+    await saveData(); render();
+  }
+  function computeBalances(expenses, people) {
+    const bal = {}; people.forEach(p => bal[p.id] = 0);
+    expenses.forEach(e => {
+      bal[e.payerId] = (bal[e.payerId] || 0) + e.amount;
+      if (Array.isArray(e.participants)) e.participants.forEach(pt => bal[pt.personId] = (bal[pt.personId] || 0) - pt.amount);
+    });
+    return bal;
+  }
+  function calculateSettlements(balances) {
+    let d = [], c = [];
+    for (let id in balances) { if (balances[id] < -0.005) d.push({id, amt: -balances[id]}); if (balances[id] > 0.005) c.push({id, amt: balances[id]}); }
+    d.sort((a,b)=>b.amt-a.amt); c.sort((a,b)=>b.amt-a.amt);
+    let res = [], i=0, j=0;
+    while(i<d.length && j<c.length) {
+      let a = Math.min(d[i].amt, c[j].amt);
+      res.push({from: d[i].id, to: c[j].id, amount: a});
+      d[i].amt -= a; c[j].amt -= a;
+      if (d[i].amt < 0.005) i++; if (c[j].amt < 0.005) j++;
+    }
+    return res;
+  }
+  function personName(id, people) { const p = people.find(p => p.id === id); return p ? p.name : 'Unbekannt'; }
+
+  // --- Core Render Engine ---
+  function render() {
+    if (renderLock) return;
+    try {
+      if (!state.activeListId) return renderListsOverview();
+      const activeList = getActiveList();
+      if (!activeList) { state.activeListId = null; return renderListsOverview(); }
+      const myId = state.me[state.activeListId];
+      if (!myId || !activeList.people.find(p => p.id === myId)) return renderOnboarding(activeList);
+      renderApp(activeList, myId);
+    } catch (err) {
+      console.error(err);
+      shell.innerHTML = `<div class="lt-error-banner">Systemfehler.<br/>${escapeHtml(err.message)}</div><button class="lt-btn-primary" id="btn-hard-reset">Kompletter Reset</button>`;
+      document.getElementById('btn-hard-reset').onclick = () => { localStorage.clear(); location.reload(); };
+    }
+  }
+
+  function renderListsOverview() {
+    const listCards = (!state.lists.length) ? `<div class="lt-empty">Tippe auf das Plus um zu starten.</div>` : state.lists.map(l => {
+      return `
+        <div class="lt-list-card" data-open-list="${l.id}">
+          <div class="lt-list-header"><div class="lt-list-title">${escapeHtml(l.name)}</div></div>
+          <div class="lt-list-meta"><span>👥 ${l.people.length} Personen</span></div>
+          <div class="lt-list-actions">
+            <button class="lt-list-action-btn" data-edit-list="${l.id}">Bearbeiten</button>
+            <button class="lt-list-action-btn del" data-del-list="${l.id}">Löschen</button>
+          </div>
+        </div>`;
+    }).join('');
+    
+    shell.innerHTML = `
+      <div class="lt-header" style="margin-bottom: 24px;"><div class="lt-title">Lunch<span class="lt-dot">.</span>Tab</div></div>
+      <div class="lt-section-label">Deine Listen</div>
+      <div class="lt-lists-container">${listCards}</div>
+      <button class="lt-fab" id="fab-add-list">+</button>
+    `;
+    
+    document.getElementById('fab-add-list').onclick = () => { state.sheet='add-list'; window.renderAddListSheet(); };
+    
+    shell.querySelectorAll('[data-open-list]').forEach(el => {
+      el.onclick = (e) => {
+        if (e.target.closest('.lt-list-actions')) return; 
+        state.activeListId = el.getAttribute('data-open-list'); 
+        state.activeTab = 'voting'; 
+        render();
+      };
+    });
+    
+    shell.querySelectorAll('[data-edit-list]').forEach(el => {
+      el.onclick = (e) => {
+        e.stopPropagation();
+        state.sheet='edit-list'; 
+        window.renderAddListSheet(state.lists.find(l=>l.id===el.getAttribute('data-edit-list'))); 
+      };
+    });
+    
+    shell.querySelectorAll('[data-del-list]').forEach(el => {
+      el.onclick = (e) => {
+        e.stopPropagation();
+        if(confirm('Wirklich löschen?')) deleteList(el.getAttribute('data-del-list')); 
+      };
+    });
+  }
+
+  function renderOnboarding(activeList) {
+    shell.innerHTML = `
+      <div class="lt-onboard">
+        <div class="lt-onboard-title">${escapeHtml(activeList.name)}<span class="lt-dot">.</span></div>
+        <div class="lt-onboard-sub">Wer bist du in dieser Liste?</div>
+        <input class="lt-input" id="lt-onboard-name" placeholder="Dein Name" autofocus />
+        <button class="lt-btn-primary" id="lt-onboard-go" style="margin-top:10px; width:100%; max-width:280px;">Loslegen</button>
+        ${activeList.people.length ? `<div style="margin-top:20px; font-size:12px; color:var(--text-muted)">Oder wähle:</div><div style="margin-top:10px;">${activeList.people.map(p => `<span class="lt-existing-chip" data-onboard-id="${p.id}"><span class="lt-avatar" style="background:${colorFor(p.id, activeList.people)}; width:16px; height:16px; font-size:8px;">${initials(p.name)}</span> ${escapeHtml(p.name)}</span>`).join(' ')}</div>` : ''}
+      </div>
+    `;
+    document.getElementById('lt-onboard-go').onclick = () => onboard(document.getElementById('lt-onboard-name').value);
+    shell.querySelectorAll('[data-onboard-id]').forEach(el => {
+      el.onclick = () => { state.me[activeList.id] = el.getAttribute('data-onboard-id'); saveData().then(render); };
+    });
+  }
+
+  function renderApp(activeList, myId) {
+    const people = activeList.people || [];
+    const me = people.find(p => p.id === myId);
+
+    let html = `
+      <div class="lt-header">
+        <button class="lt-back-btn" id="nav-back">‹ Listen</button>
+        <button class="lt-me-badge" id="nav-switch"><span class="lt-avatar" style="background:${colorFor(me.id, people)}">${initials(me.name)}</span> wechseln</button>
+      </div>
+      <div class="lt-title" style="margin-bottom: 20px;">${escapeHtml(activeList.name)}<span class="lt-dot">.</span></div>
+      <div class="lt-tabs">
+        <div class="lt-tab ${state.activeTab === 'voting' ? 'active' : ''}" id="tab-voting">Abstimmung</div>
+        <div class="lt-tab ${state.activeTab === 'ordering' ? 'active' : ''}" id="tab-ordering">Bestellung</div>
+        <div class="lt-tab ${state.activeTab === 'expenses' ? 'active' : ''}" id="tab-expenses">Abrechnung</div>
+      </div>
+    `;
+
+    // --- TAB 1: ABSTIMMUNG ---
+    if (state.activeTab === 'voting') {
+      const venues = activeList.venues || [];
+      const votingList = venues.length === 0 
+        ? `<div class="lt-empty" style="padding: 16px;">Noch keine Lokale angelegt. Erstelle dein erstes!</div>` 
+        : venues.sort((a,b) => b.voters.length - a.voters.length).map(v => {
+            const iVoted = v.voters.includes(me.id);
+            const isChosen = activeList.selectedVenueId === v.id;
+            return `
+              <div class="lt-voting-card" style="${isChosen ? 'border-color: var(--accent);' : ''}">
+                <div class="lt-voting-card-top">
+                  <div style="font-weight: 600; font-size: 15px;">
+                    ${escapeHtml(v.name)} ${isChosen ? '<span class="lt-you-tag">GEWÄHLT</span>' : ''}
+                  </div>
+                  <div>
+                    <button class="lt-icon-btn" data-edit-venue="${v.id}">✏️</button>
+                    <button class="lt-icon-btn" data-del-venue="${v.id}">🗑️</button>
+                  </div>
+                </div>
+                <div class="lt-voting-card-actions">
+                  <div class="lt-voter-avatars">${v.voters.map(vid => `<span class="lt-avatar" style="background:${colorFor(vid, people)};" title="${escapeHtml(personName(vid, people))}">${initials(personName(vid, people))}</span>`).join('')}</div>
+                  <div style="display:flex; gap:6px;">
+                    <button class="lt-action-btn ${isChosen ? 'active' : ''}" data-choose-venue="${v.id}">${isChosen ? '✓ Ziel' : 'Festlegen'}</button>
+                    <button class="lt-action-btn ${iVoted ? 'active' : ''}" data-vote="${v.id}">${v.voters.length} 👍</button>
+                  </div>
+                </div>
+              </div>`;
+          }).join('');
+
+      html += `
+        <div class="lt-section-label">Wo wollen wir heute essen?</div>
+        
+        <button class="lt-btn-secondary" style="margin-bottom: 12px; display:flex; justify-content:center; align-items:center; gap:8px;" id="btn-open-inspiration">
+          <span>💡</span> Münster-Tipps entdecken
+        </button>
+
+        <div class="lt-add-person-inline" style="margin-bottom: 20px;">
+          <input class="lt-input" id="inp-add-venue" placeholder="Oder neues Lokal anlegen..." />
+          <button id="btn-add-venue">Hinzufügen</button>
+        </div>
+        
+        <div style="margin-bottom: 24px;">${votingList}</div>
+        ${(venues.length > 0 || activeList.orders.length > 0) ? `<button class="lt-action-btn" style="width:100%; padding: 12px; margin-top: 10px; text-align:center;" id="btn-reset-day">🔄 Neuen Tag starten (Leeren)</button>` : ''}
+      `;
+    } 
+    
+    // --- TAB 2: BESTELLUNG ---
+    else if (state.activeTab === 'ordering') {
+      const v = activeList.selectedVenueId ? activeList.venues.find(x => x.id === activeList.selectedVenueId) : null;
+      
+      html += `
+        <div class="lt-section-title-row">
+          <div class="lt-section-label">Speisekarte ${v ? `(bei ${escapeHtml(v.name)})` : ''}</div>
+          <button class="lt-action-btn" id="btn-edit-menu">📋 Speisekarten verwalten</button>
+        </div>
+      `;
+
+      if (!v) {
+        html += `<div class="lt-empty" style="margin-bottom:24px;">Kein Lokal für heute festgelegt.<br/>Lege eines im Tab "Abstimmung" fest oder bestelle über das + manuell.</div>`;
+      } else {
+        const menuChips = v.menu.map(d => `<button class="lt-existing-chip" data-quick-order='{"e":"${escapeHtml(d.emoji)}","n":"${escapeHtml(d.name)}","p":"${d.price||''}"}'><span>${escapeHtml(d.emoji)}</span> ${escapeHtml(d.name)}${d.price ? ` (${fmtPlain(d.price)}€)` : ''}</button>`).join('');
+        html += `${menuChips ? `<div style="margin-bottom: 24px; display:flex; flex-wrap:wrap; gap:6px;">${menuChips}</div>` : '<div style="font-size:13px; color:var(--text-muted); margin-bottom:24px;">Keine Gerichte angelegt. Klicke auf Speisekarten verwalten!</div>'}`;
+      }
+
+      const orders = activeList.orders || [];
+      const orderSummaryMap = {}; let totalEstimatedCost = 0;
+      orders.forEach(o => { const key = `${o.emoji} ${o.dish}`; orderSummaryMap[key] = (orderSummaryMap[key] || 0) + 1; totalEstimatedCost += (parseFloat(o.price) || 0); });
+      const summaryRows = Object.keys(orderSummaryMap).map(k => `<div class="lt-order-summary-item"><span>${escapeHtml(k)}</span><span class="lt-mono" style="font-weight: 700;">${orderSummaryMap[k]}x</span></div>`).join('');
+
+      const orderItems = orders.length === 0 ? `<div class="lt-empty" style="padding: 24px 16px;">Tippe unten auf <b>+</b> um etwas Eigenes zu bestellen, oder wähle aus der Speisekarte.</div>` : orders.map(o => `<div class="lt-order-item-card"><div style="display:flex; align-items:center; gap: 10px;"><span class="lt-avatar" style="background:${colorFor(o.personId, people)}">${initials(personName(o.personId, people))}</span><div><div style="font-weight: 600; font-size: 14px;">${escapeHtml(o.emoji)} ${escapeHtml(o.dish)}${o.price ? `<span class="lt-mono" style="font-size:12px; margin-left:6px; color:var(--text);">${fmtPlain(o.price)}€</span>` : ''}</div><div style="font-size: 12px; color: var(--text-muted);">${escapeHtml(personName(o.personId, people))} ${o.note ? `· <i>„${escapeHtml(o.note)}“</i>` : ''}</div></div></div>${o.personId === me.id ? `<button class="lt-del-btn" data-del-order="${o.id}">Löschen</button>` : ''}</div>`).join('');
+
+      html += `<div class="lt-section-label">Bestellungen von heute</div>`;
+      if (orders.length > 0) {
+        html += `<div class="lt-order-summary-box"><div class="lt-order-summary-title"><span>📋 Einkaufsliste</span> <span>~${fmtPlain(totalEstimatedCost)} €</span></div>${summaryRows}`;
+        if (activeList.isCheckedOut) {
+          html += `<button class="lt-btn-primary" style="margin-top: 14px; padding: 10px; font-size:13px; background:var(--positive); color:#12161c;" onclick="window.undoCheckout()">✓ Bestellung abgerechnet (Rückgängig)</button>`;
+        } else {
+          html += `<button class="lt-btn-primary" style="margin-top: 14px; padding: 10px; font-size:13px;" id="btn-checkout">💸 Bestellungen abrechnen</button>`;
+        }
+        html += `</div>`;
+      }
+      
+      html += `
+        <div>${orderItems}</div>
+        <button class="lt-fab" id="fab-order">+</button>
+      `;
+    } 
+    
+    // --- TAB 3: ABRECHNUNG ---
+    else if (state.activeTab === 'expenses') {
+      const allExps = activeList.expenses || [];
+      const balances = computeBalances(allExps, people);
+      const settlements = calculateSettlements(balances);
+      
+      let histExps = allExps.slice().sort((a,b) => (b.date+b.createdAt) > (a.date+a.createdAt) ? 1 : -1);
+      if (!state.showAll) histExps = histExps.filter(e => e.date.slice(0,7) === state.viewMonth);
+      if (state.historyFilter.person !== 'all') {
+        const [pId, role] = state.historyFilter.person.split('|');
+        histExps = histExps.filter(e => {
+          const isPayer = e.payerId === pId; const isPart = Array.isArray(e.participants) && e.participants.some(pt => pt.personId === pId);
+          if (role === 'payer') return isPayer; if (role === 'part') return isPart; return isPayer || isPart;
+        });
+      }
+      if (state.historyFilter.type !== 'all') {
+        histExps = histExps.filter(e => { const isSettle = e.note === 'Schuldenausgleich'; return state.historyFilter.type === 'expense' ? !isSettle : isSettle; });
+      }
+
+      const balanceRows = people.map(p => {
+        const b = balances[p.id] || 0;
+        const cls = b > 0.004 ? 'pos' : (b < -0.004 ? 'neg' : 'zero');
+        const isMe = p.id === me.id;
+        const isExpanded = state.expandedPeople.has(p.id);
+        const mySets = settlements.filter(s => s.from === p.id || s.to === p.id);
+        
+        let sHTML = '';
+        if (isExpanded) {
+          const sItems = mySets.map(s => {
+            let t = '', st = '';
+            const receiver = people.find(x => x.id === s.to);
+            const payer = people.find(x => x.id === s.from);
+            let paypalBtn = '';
+
+            if (s.from === p.id) { 
+               t = p.id===me.id ? `Du schuldest ${escapeHtml(receiver.name)}` : `${escapeHtml(p.name)} schuldet ${escapeHtml(receiver.name)}`; 
+               st = 'Geld bezahlt ➔'; 
+               if (receiver.paypal && p.id === me.id) {
+                   paypalBtn = `<a href="${getPayPalLink(receiver.paypal, s.amount)}" target="_blank" class="lt-paypal-btn">PayPal</a>`;
+               }
+            } else { 
+               t = p.id===me.id ? `${escapeHtml(payer.name)} schuldet dir` : `${escapeHtml(payer.name)} schuldet ${escapeHtml(p.name)}`; 
+               st = 'Geld erhalten ➔'; 
+            }
+            return `<div class="lt-debt-item"><div class="lt-debt-info"><span>${t}</span><div style="display:flex; align-items:center; gap:6px;">${paypalBtn}<span class="lt-mono" style="font-weight:600;">${fmtPlain(s.amount)} €</span></div></div><div class="lt-settle-slider-wrap"><div class="lt-settle-slider-text">${st}</div><input type="range" min="0" max="100" value="0" class="lt-settle-slider" data-from="${s.from}" data-to="${s.to}" data-amount="${s.amount}" /></div></div>`;
+          }).join('');
+          sHTML = `<div class="lt-debt-list">${mySets.length===0 ? '<div class="lt-debt-empty">Alles ausgeglichen!</div>' : sItems}</div>`;
+        }
+        return `<div class="lt-balance-card"><div class="lt-balance-row ${isMe?'lt-is-me':''}" data-toggle-person="${p.id}"><span class="lt-avatar" style="background:${colorFor(p.id, people)}">${initials(p.name)}</span><span class="lt-balance-name">${escapeHtml(p.name)}</span><div style="text-align:right;"><div class="lt-balance-amt ${cls}">${fmt(b)}</div></div><div class="lt-chevron ${isExpanded?'open':''}">▼</div></div>${isExpanded?sHTML:''}</div>`;
+      }).join('');
+
+      const historyItems = histExps.length ? histExps.map(e => {
+        const isEx = state.expandedHistory.has(e.id);
+        const isSet = e.note === 'Schuldenausgleich';
+        const pList = (e.participants||[]).map(pt => `${escapeHtml(personName(pt.personId, people))} (${fmtPlain(pt.amount)}€)`).join(', ');
+        return `<div class="lt-history-item" style="--hist-color:${colorFor(e.payerId, people)}"><div class="lt-history-top" data-toggle-history="${e.id}"><div><div class="lt-history-note-row"><span class="lt-history-icon">${isSet?'💸':'🍱'}</span><span class="lt-history-note">${escapeHtml(e.note || (isSet?'Ausgleich':'Mittagessen'))}</span></div><div class="lt-history-meta">${new Date(e.date).toLocaleDateString('de-DE')} · ${escapeHtml(personName(e.payerId, people))} zahlte</div></div><div class="lt-history-amt">${fmtPlain(e.amount)} €<span class="lt-chevron ${isEx?'open':''}">▼</span></div></div><div class="lt-history-details ${isEx?'open':''}"><div class="lt-history-participants">Beteiligt: ${pList}</div><div class="lt-actions-row"><button class="lt-action-btn" data-edit-exp="${e.id}">Bearbeiten</button><button class="lt-action-btn lt-del-btn" data-del-exp="${e.id}">Löschen</button></div></div></div>`;
+      }).join('') : '<div class="lt-empty">Keine Einträge.</div>';
+
+      html += `
+        <div class="lt-section-label" style="margin-bottom:10px;">Kontostand (Tippen für Details)</div>
+        <div class="lt-balances">${balanceRows}</div>
+        
+        <div class="lt-section-title-row" id="toggle-history" style="cursor:pointer; user-select:none; margin-top:32px;">
+          <div class="lt-section-label" style="font-size:12px;">Verlauf ${histExps.length > 0 ? `(${histExps.length})` : ''}</div>
+          <div class="lt-chevron ${state.showHistory ? 'open' : ''}" style="font-size: 14px; margin-right: 4px;">▼</div>
+        </div>
+        
+        <div style="display: ${state.showHistory ? 'block' : 'none'}; padding-top: 8px;">
+          <div class="lt-monthnav" style="margin-bottom: 12px;">
+            <button id="nav-prev">‹</button>
+            <div style="text-align:center"><div class="lt-monthlabel">${state.showAll ? 'Gesamter Zeitraum' : monthLabel(state.viewMonth)}</div><div class="lt-all-toggle" id="nav-toggle-all">${state.showAll?'nur diesen Monat':'alles anzeigen'}</div></div>
+            <button id="nav-next">›</button>
+          </div>
+          <div class="lt-history-filters">
+            <select id="filter-p" class="lt-history-filter-select"><option value="all">Alle Personen</option>${people.map(p => `<optgroup label="${escapeHtml(p.name)}"><option value="${p.id}|all" ${state.historyFilter.person === p.id+'|all' ? 'selected' : ''}>Alle Einträge</option><option value="${p.id}|payer" ${state.historyFilter.person === p.id+'|payer' ? 'selected' : ''}>Hat bezahlt</option><option value="${p.id}|part" ${state.historyFilter.person === p.id+'|part' ? 'selected' : ''}>War beteiligt</option></optgroup>`).join('')}</select>
+            <select id="filter-t" class="lt-history-filter-select"><option value="all">Alle Einträge</option><option value="expense" ${state.historyFilter.type === 'expense' ? 'selected' : ''}>🍱 Nur Essen</option><option value="settle" ${state.historyFilter.type === 'settle' ? 'selected' : ''}>💸 Nur Ausgleiche</option></select>
+          </div>
+          <div>${historyItems}</div>
+        </div>
+        
+        <button class="lt-fab" id="fab-expense">+</button>
+      `;
+    }
+    
+    shell.innerHTML = html;
+
+    // --- EVENT BINDING ---
+    document.getElementById('nav-back').onclick = () => { state.activeListId = null; render(); };
+    document.getElementById('nav-switch').onclick = () => { state.sheet = 'people-manager'; window.renderPeopleManagerSheet(); };
+    document.getElementById('tab-voting').onclick = () => { state.activeTab = 'voting'; render(); };
+    document.getElementById('tab-ordering').onclick = () => { state.activeTab = 'ordering'; render(); };
+    document.getElementById('tab-expenses').onclick = () => { state.activeTab = 'expenses'; render(); };
+
+    // Events Tab 1 (Voting)
+    if (state.activeTab === 'voting') {
+      const btnAddVenue = document.getElementById('btn-add-venue');
+      if (btnAddVenue) btnAddVenue.onclick = async () => {
+        const name = document.getElementById('inp-add-venue').value;
+        if(name) {
+            window.addVenue(name);
+        }
+      };
+      const btnOpenInspiration = document.getElementById('btn-open-inspiration');
+      if (btnOpenInspiration) btnOpenInspiration.onclick = () => { state.sheet='inspiration'; window.renderInspirationSheet(); };
+
+      shell.querySelectorAll('[data-edit-venue]').forEach(el => el.onclick = () => window.editVenueName(el.getAttribute('data-edit-venue')));
+      shell.querySelectorAll('[data-del-venue]').forEach(el => el.onclick = () => window.deleteVenue(el.getAttribute('data-del-venue')));
+      shell.querySelectorAll('[data-choose-venue]').forEach(el => el.onclick = () => window.lockVenue(el.getAttribute('data-choose-venue')));
+      shell.querySelectorAll('[data-vote]').forEach(el => el.onclick = () => window.toggleVoteVenue(el.getAttribute('data-vote')));
+      const btnResetDay = document.getElementById('btn-reset-day');
+      if (btnResetDay) btnResetDay.onclick = () => window.resetDay();
+    }
+
+    // Events Tab 2 (Ordering)
+    if (state.activeTab === 'ordering') {
+      const editMenuBtn = document.getElementById('btn-edit-menu');
+      if (editMenuBtn) editMenuBtn.onclick = () => { 
+        window.openMenuManager(); 
+      };
+      
+      shell.querySelectorAll('[data-quick-order]').forEach(el => {
+        el.onclick = () => {
+            const d = JSON.parse(el.getAttribute('data-quick-order'));
+            window.addOrUpdateOrder(d.e, d.n, '', d.p);
+        }
+      });
+      shell.querySelectorAll('[data-del-order]').forEach(el => el.onclick = () => window.deleteOrder(el.getAttribute('data-del-order')));
+      
+      const checkoutBtn = document.getElementById('btn-checkout');
+      if (checkoutBtn) checkoutBtn.onclick = () => window.initiateCheckout();
+      
+      const fabOrder = document.getElementById('fab-order');
+      if(fabOrder) fabOrder.onclick = () => { state.sheet='add-order'; window.renderAddOrderSheet(); };
+    }
+
+    // Events Tab 3 (Expenses)
+    if (state.activeTab === 'expenses') {
+      if (state.showHistory) {
+          document.getElementById('nav-prev').onclick = () => { state.viewMonth = shiftMonth(state.viewMonth, -1); render(); };
+          document.getElementById('nav-next').onclick = () => { state.viewMonth = shiftMonth(state.viewMonth, 1); render(); };
+          document.getElementById('nav-toggle-all').onclick = () => { state.showAll = !state.showAll; render(); };
+          document.getElementById('filter-p').onchange = (e) => { state.historyFilter.person = e.target.value; render(); };
+          document.getElementById('filter-t').onchange = (e) => { state.historyFilter.type = e.target.value; render(); };
+      }
+
+      const toggleHist = document.getElementById('toggle-history');
+      if (toggleHist) toggleHist.onclick = () => { state.showHistory = !state.showHistory; render(); };
+
+      shell.querySelectorAll('[data-toggle-person]').forEach(el => {
+        el.onclick = (e) => {
+            if(e.target.closest('.lt-settle-slider') || e.target.closest('.lt-paypal-btn')) return;
+            const pid = el.getAttribute('data-toggle-person');
+            if (state.expandedPeople.has(pid)) state.expandedPeople.delete(pid); else state.expandedPeople.add(pid);
+            render();
+        };
+      });
+      shell.querySelectorAll('[data-toggle-history]').forEach(el => {
+        el.onclick = () => {
+            const eid = el.getAttribute('data-toggle-history');
+            if (state.expandedHistory.has(eid)) state.expandedHistory.delete(eid); else state.expandedHistory.add(eid);
+            render();
+        };
+      });
+      shell.querySelectorAll('.lt-settle-slider').forEach(sl => {
+        sl.oninput = (e) => { if (e.target.value >= 100) { e.target.disabled = true; window.settleDebt(e.target.getAttribute('data-from'), e.target.getAttribute('data-to'), parseFloat(e.target.getAttribute('data-amount'))); } };
+        sl.onchange = (e) => { if (e.target.value < 100) e.target.value = 0; };
+      });
+      shell.querySelectorAll('[data-del-exp]').forEach(el => {
+        el.onclick = async () => { 
+            if(confirm('Wirklich löschen?')) {
+                const id = el.getAttribute('data-del-exp');
+                const list = getActiveList(); list.expenses = list.expenses.filter(x => x.id !== id);
+                await saveData(); render();
+            } 
+        };
+      });
+      shell.querySelectorAll('[data-edit-exp]').forEach(el => {
+        el.onclick = () => {
+          const activeList = getActiveList();
+          const exp = activeList.expenses.find(x => x.id === el.getAttribute('data-edit-exp'));
+          if (exp) {
+            let customAmts = {};
+            (Array.isArray(exp.participants)?exp.participants:[]).forEach(p => { customAmts[p.personId] = fmtPlain(p.amount); });
+            sheetState = { editId: exp.id, payerId: exp.payerId, amount: fmtPlain(exp.amount), note: exp.note||'', date: exp.date, splitType: 'custom', selected: new Set(Object.keys(customAmts)), customAmounts: customAmts };
+            state.sheet = 'add-expense'; window.renderAddExpenseSheet();
+          }
+        };
+      });
+      
+      const fabExp = document.getElementById('fab-expense');
+      if (fabExp) fabExp.onclick = () => {
+        const activeList = getActiveList();
+        sheetState = { editId: null, payerId: state.me[state.activeListId], amount: '', note: '', date: new Date().toISOString().slice(0,10), splitType: 'equal', selected: new Set((activeList.people||[]).map(p=>p.id)), customAmounts: {} };
+        state.sheet = 'add-expense'; window.renderAddExpenseSheet();
+      };
+    }
+
+    // Modal Manager Routing
+    if (state.sheet === 'add-list' || state.sheet === 'edit-list') window.renderAddListSheet(state.sheet === 'edit-list' ? state.lists.find(l=>l.id===state.activeListId) : null);
+    if (state.sheet === 'add-order') window.renderAddOrderSheet();
+    if (state.sheet === 'add-expense') window.renderAddExpenseSheet();
+    if (state.sheet === 'manage-menu') window.renderMenuManagerSheet();
+    if (state.sheet === 'people-manager') window.renderPeopleManagerSheet();
+    if (state.sheet === 'edit-person') window.renderEditPersonSheet();
+    if (state.sheet === 'inspiration') window.renderInspirationSheet();
+  }
+
+  // --- Modals ---
+  
+  window.renderInspirationSheet = function() {
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    const content = Object.keys(state.inspView).map(cat => `
+      <div style="margin-bottom: 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div class="lt-field-label" style="font-size: 13px; color: var(--accent); margin:0;">${escapeHtml(cat)}</div>
+          <button class="lt-icon-btn" data-refresh-cat="${escapeHtml(cat)}" style="font-size: 12px; border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px;">🔄 Neu</button>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          ${state.inspView[cat].map(item => `<button class="lt-existing-chip" data-add-insp="${escapeHtml(item)}">+ ${escapeHtml(item)}</button>`).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    overlay.innerHTML = `
+      <div class="lt-sheet">
+        <div class="lt-sheet-title">💡 Münster Lunch-Tipps (Bogenstr.)</div>
+        <div style="margin-bottom: 20px; max-height: 60vh; overflow-y:auto; padding-right:4px;">
+          ${content}
+        </div>
+        <div class="lt-sheet-actions">
+          <button class="lt-btn-secondary" id="btn-close-insp">Schließen</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-close-insp').onclick = closeSheet;
+
+    overlay.querySelectorAll('[data-refresh-cat]').forEach(btn => {
+      btn.onclick = () => {
+        const cat = btn.getAttribute('data-refresh-cat');
+        state.inspView[cat] = getRandomItems(LUNCH_POOL[cat], 2);
+        window.renderInspirationSheet();
+      };
+    });
+
+    overlay.querySelectorAll('[data-add-insp]').forEach(btn => {
+      btn.onclick = () => {
+        window.addVenue(btn.getAttribute('data-add-insp'));
+        closeSheet();
+      };
+    });
+  }
+
+  window.renderMenuManagerSheet = function() {
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    const list = getActiveList();
+    const vId = list.selectedVenueId;
+    const v = list.venues.find(x => x.id === menuState.venueId);
+    if (!v) { closeSheet(); return; }
+
+    const isEditingDish = menuState.editDishId != null;
+    let editEmoji = '🍱', editName = '', editPrice = '';
+    if (isEditingDish) {
+        const dish = v.menu.find(d => d.id === menuState.editDishId);
+        if (dish) { editEmoji = dish.emoji; editName = dish.name; editPrice = dish.price ? fmtPlain(dish.price) : ''; }
+    }
+
+    const itemsHtml = v.menu.length === 0 ? `<div class="lt-empty" style="padding:16px;">Noch keine Gerichte für ${escapeHtml(v.name)}.</div>` : v.menu.map(d => `
+      <div class="lt-menu-edit-item" style="${menuState.editDishId === d.id ? 'border-color: var(--accent);' : ''}">
+        <div class="lt-menu-edit-info">
+          <span>${escapeHtml(d.emoji)} ${escapeHtml(d.name)}</span>
+          <span class="lt-mono" style="color:var(--text-muted)">${d.price ? fmtPlain(d.price)+'€' : '–'}</span>
+        </div>
+        <button class="lt-icon-btn" onclick="window.setEditDishId('${d.id}')">✏️</button>
+        <button class="lt-icon-btn" onclick="window.deleteDishFromMenu('${v.id}', '${d.id}')">🗑️</button>
+      </div>
+    `).join('');
+
+    const venueOptions = list.venues.map(ven => `<option value="${ven.id}" ${ven.id === v.id ? 'selected' : ''}>${escapeHtml(ven.name)}</option>`).join('');
+
+    overlay.innerHTML = `
+      <div class="lt-sheet">
+        <div class="lt-sheet-title">Speisekarten verwalten</div>
+        <select class="lt-select" id="mm-venue-select" style="margin-bottom: 16px;">
+          ${venueOptions}
+        </select>
+        
+        <div style="max-height: 25vh; overflow-y:auto; margin-bottom: 20px;">${itemsHtml}</div>
+        
+        <div style="border-top:1px dashed var(--border); padding-top:16px;">
+          <div class="lt-field-label">${isEditingDish ? 'Gericht bearbeiten' : 'Neues Gericht hinzufügen'}</div>
+          <div style="display:flex; gap:8px; margin-bottom: 8px;">
+            <input class="lt-input" id="lt-menu-emoji" value="${escapeHtml(editEmoji)}" style="width: 54px; text-align:center;" maxlength="2" />
+            <input class="lt-input" id="lt-menu-name" placeholder="Name (z.B. Salat)" value="${escapeHtml(editName)}" />
+            <input class="lt-input" id="lt-menu-price" placeholder="Preis €" style="width: 80px;" inputmode="decimal" value="${editPrice}" />
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="lt-btn-secondary" id="btn-close-menu">${isEditingDish ? 'Abbrechen' : 'Schließen'}</button>
+            <button class="lt-btn-primary" id="lt-save-menu-btn">${isEditingDish ? 'Speichern' : 'Hinzufügen'}</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('mm-venue-select').onchange = (e) => {
+        menuState.venueId = e.target.value;
+        menuState.editDishId = null;
+        window.renderMenuManagerSheet();
+    };
+
+    document.getElementById('btn-close-menu').onclick = () => {
+        if (isEditingDish) { menuState.editDishId = null; window.renderMenuManagerSheet(); }
+        else closeSheet();
+    };
+
+    document.getElementById('lt-save-menu-btn').onclick = () => {
+      const nm = document.getElementById('lt-menu-name').value;
+      if (nm) {
+          if (isEditingDish) {
+              window.editDishInMenu(v.id, menuState.editDishId, document.getElementById('lt-menu-emoji').value, nm, document.getElementById('lt-menu-price').value);
+          } else {
+              window.addDishToMenu(v.id, document.getElementById('lt-menu-emoji').value, nm, document.getElementById('lt-menu-price').value);
+          }
+      }
+    };
+  }
+
+  window.renderAddOrderSheet = function() {
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    overlay.innerHTML = `
+      <div class="lt-sheet">
+        <div class="lt-sheet-title">Sonderbestellung</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom: 16px;">
+          ${['🍕','🍝','🥗','🥙','🌯','🍱','🥑','🍔','🥪','🍜','🍣','🍲'].map(em => `<button class="lt-existing-chip" data-set-em="${em}">${em}</button>`).join('')}
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom: 12px;">
+          <input class="lt-input" id="lt-o-em" value="🍽️" style="width: 54px; text-align:center;" maxlength="2" />
+          <input class="lt-input" id="lt-o-name" placeholder="Gericht" autofocus />
+          <input class="lt-input" id="lt-o-price" placeholder="Preis €" style="width: 80px;" inputmode="decimal" />
+        </div>
+        <input class="lt-input" id="lt-o-note" placeholder="Notiz (ohne Zwiebeln...)" style="margin-bottom: 16px;" />
+        <div class="lt-sheet-actions"><button class="lt-btn-secondary" id="btn-cancel-o">Abbrechen</button><button class="lt-btn-primary" id="btn-save-o">Bestellen</button></div>
+      </div>
+    `;
+    overlay.querySelectorAll('[data-set-em]').forEach(btn => btn.onclick = () => document.getElementById('lt-o-em').value = btn.getAttribute('data-set-em'));
+    document.getElementById('btn-cancel-o').onclick = closeSheet;
+    document.getElementById('btn-save-o').onclick = async () => {
+      const n = document.getElementById('lt-o-name').value;
+      if(n) {
+          const list = getActiveList();
+          const myId = state.me[state.activeListId];
+          const existingIdx = list.orders.findIndex(o => o.personId === myId);
+          const price = parseFloat(String(document.getElementById('lt-o-price').value).replace(',', '.'));
+          const payload = { id: uid(), personId: myId, emoji: document.getElementById('lt-o-em').value || '🍽️', dish: n.trim(), note: document.getElementById('lt-o-note').value.trim(), price: isNaN(price) ? null : price };
+          if (existingIdx >= 0) list.orders[existingIdx] = payload; else list.orders.push(payload);
+          list.isCheckedOut = false; // Zurücksetzen, falls geändert
+          await saveData(); closeSheet(); render();
+      }
+    };
+  }
+
+  // Das dynamische Abrechnungsformular mit rocksolidem Focus-Handling
+  window.renderAddExpenseSheet = function() {
+    const activeEl = document.activeElement;
+    const focusState = activeEl ? {
+      id: activeEl.id,
+      customId: activeEl.getAttribute('data-am-id'),
+      cbId: activeEl.getAttribute('data-cb'),
+      start: activeEl.selectionStart,
+      end: activeEl.selectionEnd
+    } : null;
+
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    const isAlreadyRendered = !!document.getElementById('lt-expense-form-container');
+    const activeList = getActiveList(); const people = activeList.people || [];
+    
+    // DOM-Updating Helper (so Focus is not lost)
+    const updateDOM = () => {
+        let sum = 0;
+        const selectedIds = Array.from(sheetState.selected);
+        if (sheetState.splitType === 'custom') {
+            selectedIds.forEach(id => sum += parseFloat((sheetState.customAmounts[id] || '0').replace(',', '.')) || 0);
+            sheetState.amount = fmtPlain(sum);
+        } else {
+            sum = parseFloat((sheetState.amount || '0').replace(',', '.')) || 0;
+        }
+
+        const amtInput = document.getElementById('lt-exp-amt');
+        if (amtInput && sheetState.splitType === 'custom') {
+            amtInput.value = sheetState.amount;
+            amtInput.readOnly = true;
+            amtInput.style.opacity = '0.6';
+            amtInput.style.pointerEvents = 'none';
+        } else if (amtInput) {
+            amtInput.readOnly = false;
+            amtInput.style.opacity = '1';
+            amtInput.style.pointerEvents = 'auto';
+        }
+
+        const equalShare = selectedIds.length > 0 ? sum / selectedIds.length : 0;
+        
+        // Update Buttons
+        document.getElementById('btn-split-eq').className = sheetState.splitType === 'equal' ? 'active' : '';
+        document.getElementById('btn-split-cu').className = sheetState.splitType === 'custom' ? 'active' : '';
+
+        // Update Rows
+        people.forEach(p => {
+            const row = document.getElementById(`row-${p.id}`);
+            if(!row) return;
+            const cb = document.getElementById(`cb-${p.id}`);
+            const isChecked = sheetState.selected.has(p.id);
+            if(cb) cb.checked = isChecked;
+
+            const rightSide = document.getElementById(`right-${p.id}`);
+            if(rightSide) {
+                if(sheetState.splitType === 'equal') {
+                    rightSide.innerHTML = `<span class="lt-share-hint" style="padding-top:4px;">${isChecked ? fmtPlain(equalShare) + ' €' : '—'}</span>`;
+                } else {
+                    const inputVal = sheetState.customAmounts[p.id] || '';
+                    const dis = isChecked ? '' : 'disabled';
+                    if (rightSide.firstChild && rightSide.firstChild.tagName === 'INPUT') {
+                        const inp = rightSide.firstChild;
+                        inp.disabled = !isChecked;
+                        // Only set value if not currently focused
+                        if (document.activeElement !== inp) inp.value = inputVal;
+                    } else {
+                        rightSide.innerHTML = `<input class="lt-participant-amt" data-am-id="${p.id}" value="${inputVal}" placeholder="0,00" inputmode="decimal" ${dis} />`;
+                        rightSide.firstChild.oninput = (e) => {
+                            sheetState.customAmounts[p.id] = e.target.value;
+                            updateDOM();
+                        };
+                    }
+                }
+            }
+        });
+
+        // Save Button State
+        const btnSave = document.getElementById('lt-save-exp');
+        if (btnSave) {
+            const amtParsed = parseFloat((sheetState.amount||'0').replace(',','.'));
+            const mismatch = sheetState.splitType === 'custom' && Math.abs(sum - amtParsed) > 0.01;
+            btnSave.disabled = amtParsed <= 0 || selectedIds.length === 0 || mismatch;
+        }
+    };
+
+    if (!isAlreadyRendered) {
+        const listOrders = activeList.orders || [];
+
+        const participantRows = people.map(p => {
+          let orderHint = '';
+          if (sheetState.isCheckout) {
+             const pOrders = listOrders.filter(o => o.personId === p.id);
+             if (pOrders.length > 0) {
+                 orderHint = `<div style="font-size:11px; color:var(--text-muted); font-weight:normal; margin-top:2px;">${pOrders.map(o => o.emoji + ' ' + escapeHtml(o.dish)).join(', ')}</div>`;
+             }
+          }
+
+          return `
+            <div class="lt-participant-row" id="row-${p.id}" data-toggle-cb="${p.id}" style="align-items:flex-start; padding: 10px 0; border-bottom: 1px dashed var(--border);">
+              <div style="flex:1; display:flex; align-items:flex-start; gap:8px;">
+                 <input type="checkbox" id="cb-${p.id}" style="pointer-events:none; margin-top:2px;" />
+                 <span class="lt-avatar" style="background:${colorFor(p.id, people)}">${initials(p.name)}</span> 
+                 <div>
+                    ${escapeHtml(p.name)}
+                    ${orderHint}
+                 </div>
+              </div>
+              <div id="right-${p.id}" style="padding-top:2px;"></div>
+            </div>`;
+        }).join('');
+
+        overlay.innerHTML = `
+          <div class="lt-sheet" id="lt-expense-form-container">
+            <div class="lt-sheet-title">${sheetState.editId ? 'Ausgabe bearbeiten' : 'Ausgabe eintragen'}</div>
+            <div class="lt-field-label">Wer hat bezahlt?</div>
+            <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; font-size: 15px; color: var(--text); opacity: 0.8; margin-bottom: 14px;">
+              ${escapeHtml(personName(sheetState.payerId, people))}
+            </div>
+            <div class="lt-field-label">Gesamtbetrag ${sheetState.splitType === 'custom' ? '(Auto-Berechnet)' : ''}</div>
+            <input class="lt-input lt-amount-input" id="lt-exp-amt" value="${sheetState.amount}" inputmode="decimal" placeholder="0,00 €" />
+            <div class="lt-field-label">Wofür?</div>
+            <input class="lt-input" id="lt-exp-note" value="${escapeHtml(sheetState.note)}" placeholder="z. B. Mittagessen" />
+            <div class="lt-field-label">Aufteilung</div>
+            <div class="lt-split-toggle">
+               <button id="btn-split-eq">Gleich</button>
+               <button id="btn-split-cu">Individuell</button>
+            </div>
+            <div style="margin-top: 10px;">${participantRows}</div>
+            <div class="lt-sheet-actions">
+               <button class="lt-btn-secondary" id="btn-cancel-exp">Abbrechen</button>
+               <button class="lt-btn-primary" id="lt-save-exp">Speichern</button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('lt-exp-amt').oninput = (e) => { 
+            if(sheetState.splitType !== 'custom') { sheetState.amount = e.target.value; updateDOM(); }
+        };
+        document.getElementById('lt-exp-note').oninput = (e) => { sheetState.note = e.target.value; };
+        
+        document.getElementById('btn-split-eq').onclick = () => { sheetState.splitType = 'equal'; updateDOM(); };
+        document.getElementById('btn-split-cu').onclick = () => { sheetState.splitType = 'custom'; updateDOM(); };
+        document.getElementById('btn-cancel-exp').onclick = closeSheet;
+
+        // Custom Row Click (toggle check)
+        overlay.querySelectorAll('[data-toggle-cb]').forEach(row => {
+          row.onclick = (e) => {
+              if(e.target.tagName === 'INPUT' && e.target.type === 'text') return; // Ignore input clicks
+              const id = row.getAttribute('data-toggle-cb');
+              if (sheetState.selected.has(id)) sheetState.selected.delete(id); else sheetState.selected.add(id);
+              updateDOM();
+          };
+        });
+
+        document.getElementById('lt-save-exp').onclick = async () => {
+          const tot = parseFloat((sheetState.amount || '0').replace(',', '.')) || 0;
+          let participants;
+          const selectedIds = Array.from(sheetState.selected);
+          if (sheetState.splitType === 'equal') {
+            const base = Math.floor((tot / selectedIds.length) * 100) / 100;
+            let rem = Math.round((tot - base * selectedIds.length) * 100);
+            participants = selectedIds.map(id => {
+              const ex = rem > 0 ? 0.01 : 0; if (rem > 0) rem--;
+              return { personId: id, amount: Math.round((base + ex) * 100) / 100 };
+            });
+          } else {
+            participants = selectedIds.map(id => ({ personId: id, amount: Math.round((parseFloat((sheetState.customAmounts[id] || '0').replace(',', '.')) || 0) * 100) / 100 }));
+          }
+          const pLoad = { id: sheetState.editId || uid(), date: sheetState.date, payerId: sheetState.payerId, amount: Math.round(tot * 100) / 100, note: sheetState.note.trim(), participants, createdAt: sheetState.editId ? activeList.expenses.find(e=>e.id===sheetState.editId).createdAt : Date.now().toString() };
+          
+          if (sheetState.editId) activeList.expenses = activeList.expenses.map(e => e.id === sheetState.editId ? pLoad : e);
+          else activeList.expenses.push(pLoad);
+          
+          if (sheetState.isCheckout) activeList.isCheckedOut = true;
+          
+          await saveData(); closeSheet(); render(); 
+        };
+    }
+
+    // Call updateDOM to sync the values with UI
+    updateDOM();
+    
+    // Focus-State wiederherstellen
+    if (focusState) {
+      let elToFocus = null;
+      if (focusState.id) elToFocus = document.getElementById(focusState.id);
+      else if (focusState.customId) elToFocus = overlay.querySelector(`[data-am-id="${focusState.customId}"]`);
+      else if (focusState.cbId) elToFocus = overlay.querySelector(`[data-cb="${focusState.cbId}"]`);
+      
+      if (elToFocus) {
+        elToFocus.focus();
+        if (typeof focusState.start === 'number' && elToFocus.type !== 'checkbox') {
+          try { elToFocus.setSelectionRange(focusState.start, focusState.end); } catch(e) {}
+        }
+      }
+    }
+  }
+
+  // --- Neuer "Personen Manager & Switcher" ---
+  window.renderPeopleManagerSheet = function() {
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    const activeList = getActiveList();
+    const people = activeList.people || [];
+    const myId = state.me[state.activeListId];
+
+    const peopleListHtml = people.map(p => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px dashed var(--border);">
+         <div class="lt-switch-person-btn" data-pid="${p.id}" style="display:flex; align-items:center; gap:12px; cursor:pointer; flex:1;">
+           <span class="lt-avatar" style="background:${colorFor(p.id, people)}">${initials(p.name)}</span>
+           <span style="font-weight:600; font-size:15px; ${p.id===myId?'color:var(--accent)':''}">${escapeHtml(p.name)} ${p.id===myId?'(Du)':''}</span>
+         </div>
+         <button class="lt-icon-btn" data-edit-p="${p.id}">✏️</button>
+      </div>
+    `).join('');
+
+    overlay.innerHTML = `
+      <div class="lt-sheet">
+        <div class="lt-sheet-title">Personen verwalten</div>
+        <div style="margin-bottom: 20px; max-height: 40vh; overflow-y:auto;">
+          ${peopleListHtml}
+        </div>
+        <div class="lt-field-label" style="margin-top:0;">Neue Person hinzufügen</div>
+        <div class="lt-add-person-inline">
+           <input class="lt-input" id="inp-add-new-person" placeholder="Name..." />
+           <button id="btn-add-new-person">Hinzufügen</button>
+        </div>
+        <div class="lt-sheet-actions">
+          <button class="lt-btn-secondary" id="btn-close-pm">Schließen</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-close-pm').onclick = closeSheet;
+
+    document.getElementById('btn-add-new-person').onclick = async () => {
+      const name = document.getElementById('inp-add-new-person').value.trim();
+      if(name && !people.find(p=>p.name.toLowerCase()===name.toLowerCase())){
+        activeList.people.push({ id: uid(), name, paypal: '' });
+        await saveData();
+        window.renderPeopleManagerSheet(); // refresh
+      }
+    };
+
+    document.getElementById('inp-add-new-person').addEventListener('keydown', e => {
+      if(e.key === 'Enter') document.getElementById('btn-add-new-person').click();
+    });
+
+    overlay.querySelectorAll('.lt-switch-person-btn').forEach(el => {
+      el.onclick = async () => {
+        state.me[activeList.id] = el.getAttribute('data-pid');
+        await saveData();
+        closeSheet();
+        render();
+      };
+    });
+
+    overlay.querySelectorAll('[data-edit-p]').forEach(el => {
+      el.onclick = () => {
+        state.editPersonId = el.getAttribute('data-edit-p');
+        state.sheet = 'edit-person';
+        window.renderEditPersonSheet();
+      };
+    });
+  }
+
+  window.renderEditPersonSheet = function() {
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    const list = getActiveList();
+    const person = list.people.find(p => p.id === state.editPersonId);
+    if (!person) { closeSheet(); return; }
+
+    if(!state.editPersonColor) state.editPersonColor = person.color || colorFor(person.id, list.people);
+
+    const colorsHtml = AVATAR_COLORS.map(c => `
+      <div class="lt-color-swatch" data-color-val="${c}" style="background:${c}; border: 2px solid ${c === state.editPersonColor ? 'var(--text)' : 'transparent'};"></div>
+    `).join('');
+
+    overlay.innerHTML = `
+      <div class="lt-sheet">
+        <div class="lt-sheet-title">Person bearbeiten</div>
+        
+        <div class="lt-field-label">Name</div>
+        <input class="lt-input" id="lt-edit-person-name" value="${escapeHtml(person.name)}" />
+
+        <div class="lt-field-label">PayPal.me Name (optional)</div>
+        <input class="lt-input" id="lt-edit-person-paypal" value="${escapeHtml(person.paypal || '')}" placeholder="z.B. maxmuster" />
+        
+        <div class="lt-field-label">Avatar Farbe</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 16px;">
+           ${colorsHtml}
+        </div>
+
+        <div class="lt-sheet-actions" style="margin-top: 24px;">
+          <button class="lt-btn-secondary" id="btn-cancel-ep">Zurück</button>
+          <button class="lt-btn-primary" id="btn-save-ep">Speichern</button>
+        </div>
+        
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--border); text-align: center;">
+          <button class="lt-action-btn lt-del-btn" id="btn-del-ep" style="width: 100%; padding: 12px; font-size: 13px;">Diese Person aus der Liste löschen</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-cancel-ep').onclick = () => {
+        state.editPersonColor = null;
+        state.sheet = 'people-manager';
+        window.renderPeopleManagerSheet();
+    };
+
+    overlay.querySelectorAll('.lt-color-swatch').forEach(sw => {
+      sw.onclick = () => {
+        state.editPersonColor = sw.getAttribute('data-color-val');
+        window.renderEditPersonSheet(); 
+      };
+    });
+
+    document.getElementById('btn-save-ep').onclick = async () => { 
+      const n = document.getElementById('lt-edit-person-name').value.trim();
+      const pp = document.getElementById('lt-edit-person-paypal').value.trim();
+      if(n){ 
+        person.name = n; 
+        person.paypal = pp;
+        person.color = state.editPersonColor;
+        state.editPersonColor = null;
+        await saveData(); 
+        state.sheet = 'people-manager';
+        window.renderPeopleManagerSheet();
+        render(); 
+      }
+    };
+    
+    document.getElementById('btn-del-ep').onclick = async () => { 
+      if (confirm(`Willst du "${person.name}" wirklich löschen?`)) { 
+        const inExpenses = list.expenses.some(e => e.payerId === person.id || (Array.isArray(e.participants) && e.participants.some(pt => pt.personId === person.id)));
+        if (inExpenses) { alert("Diese Person hat noch aktive Rechnungen im Verlauf. Bitte lösche diese zuerst."); return; }
+        list.people = list.people.filter(p => p.id !== person.id);
+        if(state.me[list.id] === person.id) delete state.me[list.id];
+        if (list.venues) list.venues.forEach(v => v.voters = v.voters.filter(vid => vid !== person.id));
+        if (list.orders) list.orders = list.orders.filter(o => o.personId !== person.id);
+        state.editPersonColor = null;
+        await saveData(); 
+        state.sheet = 'people-manager';
+        window.renderPeopleManagerSheet();
+        render();
+      } 
+    };
+  }
+
+  window.renderAddListSheet = function(listToEdit = null) {
+    let overlay = document.getElementById('lt-overlay') || document.createElement('div');
+    overlay.className = 'lt-overlay'; overlay.id = 'lt-overlay';
+    if(!overlay.parentNode) { document.getElementById('lunchtab-root').appendChild(overlay); overlay.onclick = (e) => e.target === overlay && closeSheet(); }
+    
+    overlay.innerHTML = `
+      <div class="lt-sheet">
+        <div class="lt-sheet-title">${listToEdit ? 'Liste umbenennen' : 'Neue Liste erstellen'}</div>
+        <div class="lt-field-label">Name der Liste</div>
+        <input class="lt-input" id="lt-list-name-input" placeholder="z.B. Büro, WG, Urlaub" value="${listToEdit ? escapeHtml(listToEdit.name) : ''}" autofocus />
+        <div class="lt-sheet-actions">
+          <button class="lt-btn-secondary" id="btn-cancel-list">Abbrechen</button>
+          <button class="lt-btn-primary" id="btn-save-list">Speichern</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-cancel-list').onclick = closeSheet;
+    document.getElementById('btn-save-list').onclick = async () => {
+      const name = document.getElementById('lt-list-name-input').value;
+      if (listToEdit) {
+        if(name.trim()) { listToEdit.name = name.trim(); await saveData(); render(); }
+      } else {
+        if(name.trim()) {
+          state.lists.push({ id: uid(), name: name.trim(), people: [], expenses: [], venues: [], selectedVenueId: null, orders: [], isCheckedOut: false });
+          state.activeListId = state.lists[state.lists.length-1].id; state.activeTab = 'voting';
+          await saveData(); render();
+        }
+      }
+      closeSheet();
+    };
+    
+    document.getElementById('lt-list-name-input').addEventListener('keydown', e => {
+      if(e.key === 'Enter') document.getElementById('btn-save-list').click();
+    });
+  }
+
+  function closeSheet() { state.sheet = null; state.editPersonColor = null; const o = document.getElementById('lt-overlay'); if (o) o.remove(); }
+
+  loadAll();
+})();
+</script>
+</body>
+</html>}
+#lunchtab-root *, #lunchtab-root *::before, #lunchtab-root *::after { box-sizing: border-box; }
+
+.lt-shell { width: 100%; max-width: 480px; min-height: 100vh; background: var(--bg); padding: 20px 16px 100px; position: relative; }
+.lt-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Header & Tabs */
+.lt-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+.lt-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; }
+.lt-title .lt-dot { color: var(--accent); }
+.lt-back-btn { background: none; border: none; color: var(--text-muted); font-size: 15px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 18px; transition: color 0.2s; }
+.lt-back-btn:hover { color: var(--text); }
+.lt-me-badge { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; cursor: pointer; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px 4px 4px; font-family: inherit; transition: background 0.2s; }
+.lt-me-badge:hover { background: var(--border); color: var(--text); }
+.lt-avatar { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #12161c; font-family: 'Space Grotesk', sans-serif; flex-shrink: 0; }
+.lt-tabs { display: flex; background: var(--surface-2); border-radius: 12px; padding: 4px; margin-bottom: 24px; gap: 4px; }
+.lt-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s; user-select: none; }
+.lt-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+/* Lists Overview */
+.lt-lists-container { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.lt-list-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: border-color 0.2s; }
+.lt-list-card:hover { border-color: var(--accent); }
+.lt-list-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.lt-list-title { font-size: 18px; font-weight: 600; color: var(--text); }
+.lt-list-meta { font-size: 13px; color: var(--text-muted); margin-top: 6px; display: flex; gap: 10px; }
+.lt-list-actions { display: flex; gap: 10px; border-top: 1px dashed var(--border); padding-top: 12px; }
+
+/* General Sections */
+.lt-section-title-row { display: flex; justify-content: space-between; align-items: flex-end; margin: 0 0 10px 2px; }
+.lt-section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 600; margin: 0; }
+
+/* Balances */
+.lt-balances { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.lt-balance-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.lt-balance-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; user-select: none; }
+.lt-balance-row:active { background: var(--surface-2); }
+.lt-balance-row.lt-is-me { border-color: var(--accent); background: linear-gradient(0deg, var(--accent-soft), var(--accent-soft)), var(--surface); }
+.lt-balance-name { flex: 1; font-size: 14px; font-weight: 500; }
+.lt-balance-name .lt-you-tag { font-size: 10px; color: var(--accent); font-weight: 600; margin-left: 6px; }
+.lt-balance-amt { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 15px; }
+.lt-balance-amt.pos { color: var(--positive); }
+.lt-balance-amt.neg { color: var(--negative); }
+.lt-balance-amt.zero { color: var(--text-muted); }
 .lt-chevron { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; margin-left: 8px; }
 .lt-chevron.open { transform: rotate(180deg); color: var(--accent); }
 
