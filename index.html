@@ -78,7 +78,6 @@
 .lt-balance-amt.pos { color: var(--positive); }
 .lt-balance-amt.neg { color: var(--negative); }
 .lt-balance-amt.zero { color: var(--text-muted); }
-.lt-balance-hint { font-size: 10px; color: var(--text-muted); display: block; text-align: right; margin-top: 1px; }
 .lt-chevron { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; margin-left: 8px; }
 .lt-chevron.open { transform: rotate(180deg); color: var(--accent); }
 
@@ -112,8 +111,28 @@
 .lt-menu-edit-item { display: flex; align-items: center; gap: 8px; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
 .lt-menu-edit-info { flex: 1; display:flex; justify-content:space-between; align-items:center; font-size: 14px; }
 
+/* Calendar in History */
+.lt-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
+.lt-cal-head { font-size: 11px; text-align: center; color: var(--text-muted); font-weight: 600; padding: 4px 0; }
+.lt-cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 8px; font-size: 12px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; position: relative; }
+.lt-cal-day.empty { background: transparent; cursor: default; }
+.lt-cal-day:not(.empty):hover { border-color: var(--border); }
+.lt-cal-day.selected { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; color: var(--accent); }
+.lt-cal-dots { display: flex; gap: 2px; margin-top: 2px; font-size: 8px; line-height: 1; }
+
+/* History Filter Bar */
+.lt-filter-section { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.lt-person-filter-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+.lt-person-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px 4px 4px; font-size: 12px; font-weight: 500; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; user-select: none; }
+.lt-person-chip.active { border-color: var(--accent); background: var(--accent-soft); color: var(--text); font-weight: 600; }
+.lt-person-chip-all { padding: 5px 12px; }
+
+.lt-role-filters { display: flex; gap: 4px; background: var(--surface-2); padding: 3px; border-radius: 9px; }
+.lt-role-btn { flex: 1; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 600; padding: 6px 2px; border-radius: 7px; cursor: pointer; text-align: center; transition: all 0.15s; font-family: inherit; }
+.lt-role-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
 /* Common UI */
-.lt-monthnav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px 6px; margin-bottom: 18px; }
+.lt-monthnav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px 6px; margin-bottom: 12px; }
 .lt-monthnav button { background: none; border: none; color: var(--text-muted); font-size: 18px; padding: 6px 12px; cursor: pointer; border-radius: 8px; line-height: 1; font-family: inherit; }
 .lt-monthnav .lt-monthlabel { font-weight: 600; font-size: 14px; font-family: 'Space Grotesk', sans-serif; text-transform: capitalize; }
 .lt-monthnav .lt-all-toggle { font-size: 11px; color: var(--teal); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
@@ -132,9 +151,7 @@
 .lt-btn-primary { width: 100%; background: var(--accent); border: none; color: #1a1200; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
 .lt-btn-secondary { width: 100%; background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
 
-/* History filters & items */
-.lt-history-filters { display: flex; gap: 8px; margin-bottom: 12px; }
-.lt-history-filter-select { flex: 1; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; padding: 8px 10px; font-size: 12px; font-family: inherit; outline: none; }
+/* History Items */
 .lt-history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; position: relative; overflow: hidden; }
 .lt-history-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--hist-color, var(--accent)); }
 .lt-history-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 13px 14px; cursor: pointer; }
@@ -202,7 +219,6 @@
   const LISTS_KEY = 'lunchtab-lists-v6';
   const ME_KEY = 'lunchtab-me-v6';
 
-  // --- MÜNSTER INSPIRATION ---
   const LUNCH_POOL = {
     "Italienisch & Pasta 🍝": ["Marias Pastabar", "Mocca d'or", "Pasta e Basta", "L'Osteria", "Vapiano", "Pizzeria Lido", "481 Pizzamanufaktur"],
     "Bowls & Healthy 🥗": ["Beetschwester", "Krawummel", "Green Panda", "Dean & David", "Açaí", "Royals & Rice"],
@@ -261,10 +277,12 @@
     me: {},             
     activeTab: 'voting', 
     viewMonth: new Date().toISOString().slice(0,7),
+    selectedCalDate: null, 
     showAll: false,
     expandedPeople: new Set(), 
     expandedHistory: new Set(), 
-    historyFilter: { person: 'all', type: 'all' }, 
+    selectedFilterPerson: 'all', // 'all' oder personId
+    selectedFilterRole: 'all',   // 'all' | 'payer' | 'part' | 'settle'
     showHistory: false,
     error: null,
     sheet: null,
@@ -332,7 +350,7 @@
   }
 
   function loadLocal() {
-    const localData = localStorage.getItem(LISTS_KEY) || localStorage.getItem('lunchtab-lists-v5') || localStorage.getItem('lunchtab-lists-v4');
+    const localData = localStorage.getItem(LISTS_KEY) || localStorage.getItem('lunchtab-lists-v5');
     if (localData) state.lists = JSON.parse(localData);
     render();
   }
@@ -440,9 +458,7 @@
     const d = v.menu.find(x => x.id === dishId);
     if(!d) return;
     const p = parseFloat(String(priceStr).replace(',', '.'));
-    d.emoji = emoji || '🍽️';
-    d.name = name.trim();
-    d.price = isNaN(p) ? null : p;
+    d.emoji = emoji || '🍽️'; d.name = name.trim(); d.price = isNaN(p) ? null : p;
     menuState.editDishId = null;
     await saveData(); window.renderMenuManagerSheet(); 
   }
@@ -542,6 +558,87 @@
     return res;
   }
   function personName(id, people) { const p = people.find(p => p.id === id); return p ? p.name : 'Unbekannt'; }
+
+  // Filter Helper Funktion für Kalender & Liste
+  function matchesFilter(e, pId, role) {
+    const isSettle = e.note === 'Schuldenausgleich';
+    const isPayer = e.payerId === pId;
+    const isPart = Array.isArray(e.participants) && e.participants.some(pt => pt.personId === pId);
+
+    if (pId !== 'all') {
+      if (role === 'payer') {
+        if (!isPayer || isSettle) return false;
+      } else if (role === 'part') {
+        if (!isPart || isSettle) return false;
+      } else if (role === 'settle') {
+        if (!isSettle || (!isPayer && !isPart)) return false;
+      } else { // 'all' role
+        if (!isPayer && !isPart) return false;
+      }
+    } else {
+      // Wenn pId === 'all', filtern wir nur nach Rollen-Typ
+      if (role === 'payer' && isSettle) return false;
+      if (role === 'part' && isSettle) return false;
+      if (role === 'settle' && !isSettle) return false;
+    }
+    return true;
+  }
+
+  // --- Kalender Builder Helper (Reagiert nun auf die Filter!) ---
+  function renderCalendarGrid(ym, expenses, selectedDate, filterPerson, filterRole) {
+    const [y, m] = ym.split('-').map(Number);
+    const firstDay = new Date(y, m - 1, 1).getDay(); // 0=So, 1=Mo
+    const offset = (firstDay === 0 ? 6 : firstDay - 1);
+    const totalDays = new Date(y, m, 0).getDate();
+
+    const dayData = {};
+    expenses.forEach(e => {
+      if (e.date.startsWith(ym)) {
+        if (matchesFilter(e, filterPerson, filterRole)) {
+          if (!dayData[e.date]) dayData[e.date] = { hasFood: false, hasSettle: false, hasPayer: false };
+          if (e.note === 'Schuldenausgleich') {
+            dayData[e.date].hasSettle = true;
+          } else {
+            if (filterRole === 'payer' || (filterPerson !== 'all' && e.payerId === filterPerson)) {
+              dayData[e.date].hasPayer = true;
+            } else {
+              dayData[e.date].hasFood = true;
+            }
+          }
+        }
+      }
+    });
+
+    const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+    let html = '<div class="lt-cal-grid">';
+    weekdays.forEach(w => html += `<div class="lt-cal-head">${w}</div>`);
+
+    for (let i = 0; i < offset; i++) {
+      html += `<div class="lt-cal-day empty"></div>`;
+    }
+
+    for (let d = 1; d <= totalDays; d++) {
+      const dStr = ym + '-' + String(d).padStart(2, '0');
+      const isSel = selectedDate === dStr;
+      const data = dayData[dStr];
+
+      let dots = '';
+      if (data) {
+        if (data.hasPayer) dots += '<span>💳</span>';
+        else if (data.hasFood) dots += '<span>🍱</span>';
+        if (data.hasSettle) dots += '<span>💸</span>';
+      }
+
+      html += `
+        <div class="lt-cal-day ${isSel ? 'selected' : ''}" data-cal-date="${dStr}">
+          <span>${d}</span>
+          <div class="lt-cal-dots">${dots}</div>
+        </div>
+      `;
+    }
+    html += '</div>';
+    return html;
+  }
 
   // --- Core Render Engine ---
   function render() {
@@ -735,17 +832,18 @@
       const settlements = calculateSettlements(balances);
       
       let histExps = allExps.slice().sort((a,b) => (b.date+b.createdAt) > (a.date+a.createdAt) ? 1 : -1);
-      if (!state.showAll) histExps = histExps.filter(e => e.date.slice(0,7) === state.viewMonth);
-      if (state.historyFilter.person !== 'all') {
-        const [pId, role] = state.historyFilter.person.split('|');
-        histExps = histExps.filter(e => {
-          const isPayer = e.payerId === pId; const isPart = Array.isArray(e.participants) && e.participants.some(pt => pt.personId === pId);
-          if (role === 'payer') return isPayer; if (role === 'part') return isPart; return isPayer || isPart;
-        });
+      
+      // Datumsauswahl anwenden
+      if (!state.showAll) {
+        if (state.selectedCalDate) {
+          histExps = histExps.filter(e => e.date === state.selectedCalDate);
+        } else {
+          histExps = histExps.filter(e => e.date.slice(0,7) === state.viewMonth);
+        }
       }
-      if (state.historyFilter.type !== 'all') {
-        histExps = histExps.filter(e => { const isSettle = e.note === 'Schuldenausgleich'; return state.historyFilter.type === 'expense' ? !isSettle : isSettle; });
-      }
+      
+      // Neue Rollen- & Personenfilter anwenden
+      histExps = histExps.filter(e => matchesFilter(e, state.selectedFilterPerson, state.selectedFilterRole));
 
       const balanceRows = people.map(p => {
         const b = balances[p.id] || 0;
@@ -784,27 +882,55 @@
         const isSet = e.note === 'Schuldenausgleich';
         const pList = (e.participants||[]).map(pt => `${escapeHtml(personName(pt.personId, people))} (${fmtPlain(pt.amount)}€)`).join(', ');
         return `<div class="lt-history-item" style="--hist-color:${colorFor(e.payerId, people)}"><div class="lt-history-top" data-toggle-history="${e.id}"><div><div class="lt-history-note-row"><span class="lt-history-icon">${isSet?'💸':'🍱'}</span><span class="lt-history-note">${escapeHtml(e.note || (isSet?'Ausgleich':'Mittagessen'))}</span></div><div class="lt-history-meta">${new Date(e.date).toLocaleDateString('de-DE')} · ${escapeHtml(personName(e.payerId, people))} zahlte</div></div><div class="lt-history-amt">${fmtPlain(e.amount)} €<span class="lt-chevron ${isEx?'open':''}">▼</span></div></div><div class="lt-history-details ${isEx?'open':''}"><div class="lt-history-participants">Beteiligt: ${pList}</div><div class="lt-actions-row"><button class="lt-action-btn" data-edit-exp="${e.id}">Bearbeiten</button><button class="lt-action-btn lt-del-btn" data-del-exp="${e.id}">Löschen</button></div></div></div>`;
-      }).join('') : '<div class="lt-empty">Keine Einträge.</div>';
+      }).join('') : '<div class="lt-empty">Keine Einträge für diese Auswahl.</div>';
+
+      // Neue Avatar-Chips erstellen
+      const personChips = `
+        <div class="lt-person-chip lt-person-chip-all ${state.selectedFilterPerson === 'all' ? 'active' : ''}" data-filter-p="all">
+          Alle
+        </div>
+        ${people.map(p => `
+          <div class="lt-person-chip ${state.selectedFilterPerson === p.id ? 'active' : ''}" data-filter-p="${p.id}">
+            <span class="lt-avatar" style="background:${colorFor(p.id, people)}; width:16px; height:16px; font-size:8px;">${initials(p.name)}</span>
+            ${escapeHtml(p.name)}
+          </div>
+        `).join('')}
+      `;
 
       html += `
         <div class="lt-section-label" style="margin-bottom:10px;">Kontostand (Tippen für Details)</div>
         <div class="lt-balances">${balanceRows}</div>
         
         <div class="lt-section-title-row" id="toggle-history" style="cursor:pointer; user-select:none; margin-top:32px;">
-          <div class="lt-section-label" style="font-size:12px;">Verlauf ${histExps.length > 0 ? `(${histExps.length})` : ''}</div>
+          <div class="lt-section-label" style="font-size:12px;">Verlauf</div>
           <div class="lt-chevron ${state.showHistory ? 'open' : ''}" style="font-size: 14px; margin-right: 4px;">▼</div>
         </div>
         
         <div style="display: ${state.showHistory ? 'block' : 'none'}; padding-top: 8px;">
-          <div class="lt-monthnav" style="margin-bottom: 12px;">
+          <div class="lt-monthnav">
             <button id="nav-prev">‹</button>
-            <div style="text-align:center"><div class="lt-monthlabel">${state.showAll ? 'Gesamter Zeitraum' : monthLabel(state.viewMonth)}</div><div class="lt-all-toggle" id="nav-toggle-all">${state.showAll?'nur diesen Monat':'alles anzeigen'}</div></div>
+            <div style="text-align:center">
+              <div class="lt-monthlabel">${state.showAll ? 'Gesamter Zeitraum' : (state.selectedCalDate ? new Date(state.selectedCalDate).toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' }) : monthLabel(state.viewMonth))}</div>
+              <div class="lt-all-toggle" id="nav-toggle-all">${state.showAll ? 'nur diesen Monat' : (state.selectedCalDate ? 'ganzen Monat zeigen' : 'alles anzeigen')}</div>
+            </div>
             <button id="nav-next">›</button>
           </div>
-          <div class="lt-history-filters">
-            <select id="filter-p" class="lt-history-filter-select"><option value="all">Alle Personen</option>${people.map(p => `<optgroup label="${escapeHtml(p.name)}"><option value="${p.id}|all" ${state.historyFilter.person === p.id+'|all' ? 'selected' : ''}>Alle Einträge</option><option value="${p.id}|payer" ${state.historyFilter.person === p.id+'|payer' ? 'selected' : ''}>Hat bezahlt</option><option value="${p.id}|part" ${state.historyFilter.person === p.id+'|part' ? 'selected' : ''}>War beteiligt</option></optgroup>`).join('')}</select>
-            <select id="filter-t" class="lt-history-filter-select"><option value="all">Alle Einträge</option><option value="expense" ${state.historyFilter.type === 'expense' ? 'selected' : ''}>🍱 Nur Essen</option><option value="settle" ${state.historyFilter.type === 'settle' ? 'selected' : ''}>💸 Nur Ausgleiche</option></select>
+
+          <!-- Neue visuelle Filterleiste -->
+          <div class="lt-filter-section">
+            <div class="lt-person-filter-chips">
+              ${personChips}
+            </div>
+            <div class="lt-role-filters">
+              <button class="lt-role-btn ${state.selectedFilterRole === 'all' ? 'active' : ''}" data-filter-role="all">Alles</button>
+              <button class="lt-role-btn ${state.selectedFilterRole === 'payer' ? 'active' : ''}" data-filter-role="payer">💳 Ausgelegt</button>
+              <button class="lt-role-btn ${state.selectedFilterRole === 'part' ? 'active' : ''}" data-filter-role="part">🍱 Mitgegessen</button>
+              <button class="lt-role-btn ${state.selectedFilterRole === 'settle' ? 'active' : ''}" data-filter-role="settle">💸 Ausgleiche</button>
+            </div>
           </div>
+
+          ${!state.showAll ? renderCalendarGrid(state.viewMonth, allExps, state.selectedCalDate, state.selectedFilterPerson, state.selectedFilterRole) : ''}
+
           <div>${historyItems}</div>
         </div>
         
@@ -866,11 +992,47 @@
     // Events Tab 3 (Expenses)
     if (state.activeTab === 'expenses') {
       if (state.showHistory) {
-          document.getElementById('nav-prev').onclick = () => { state.viewMonth = shiftMonth(state.viewMonth, -1); render(); };
-          document.getElementById('nav-next').onclick = () => { state.viewMonth = shiftMonth(state.viewMonth, 1); render(); };
-          document.getElementById('nav-toggle-all').onclick = () => { state.showAll = !state.showAll; render(); };
-          document.getElementById('filter-p').onchange = (e) => { state.historyFilter.person = e.target.value; render(); };
-          document.getElementById('filter-t').onchange = (e) => { state.historyFilter.type = e.target.value; render(); };
+          document.getElementById('nav-prev').onclick = () => { 
+            state.viewMonth = shiftMonth(state.viewMonth, -1); 
+            state.selectedCalDate = null;
+            render(); 
+          };
+          document.getElementById('nav-next').onclick = () => { 
+            state.viewMonth = shiftMonth(state.viewMonth, 1); 
+            state.selectedCalDate = null;
+            render(); 
+          };
+          document.getElementById('nav-toggle-all').onclick = () => { 
+            if (state.selectedCalDate) {
+              state.selectedCalDate = null;
+            } else {
+              state.showAll = !state.showAll; 
+            }
+            render(); 
+          };
+
+          // Filter Buttons Event Binding
+          shell.querySelectorAll('[data-filter-p]').forEach(el => {
+            el.onclick = () => {
+              state.selectedFilterPerson = el.getAttribute('data-filter-p');
+              render();
+            };
+          });
+
+          shell.querySelectorAll('[data-filter-role]').forEach(el => {
+            el.onclick = () => {
+              state.selectedFilterRole = el.getAttribute('data-filter-role');
+              render();
+            };
+          });
+
+          shell.querySelectorAll('[data-cal-date]').forEach(el => {
+            el.onclick = () => {
+              const d = el.getAttribute('data-cal-date');
+              state.selectedCalDate = (state.selectedCalDate === d) ? null : d;
+              render();
+            };
+          });
       }
 
       const toggleHist = document.getElementById('toggle-history');
@@ -1174,7 +1336,6 @@
                     if (rightSide.firstChild && rightSide.firstChild.tagName === 'INPUT') {
                         const inp = rightSide.firstChild;
                         inp.disabled = !isChecked;
-                        // Only set value if not currently focused
                         if (document.activeElement !== inp) inp.value = inputVal;
                     } else {
                         rightSide.innerHTML = `<input class="lt-participant-amt" data-am-id="${p.id}" value="${inputVal}" placeholder="0,00" inputmode="decimal" ${dis} />`;
@@ -1255,10 +1416,9 @@
         document.getElementById('btn-split-cu').onclick = () => { sheetState.splitType = 'custom'; updateDOM(); };
         document.getElementById('btn-cancel-exp').onclick = closeSheet;
 
-        // Custom Row Click (toggle check)
         overlay.querySelectorAll('[data-toggle-cb]').forEach(row => {
           row.onclick = (e) => {
-              if(e.target.tagName === 'INPUT' && e.target.type === 'text') return; // Ignore input clicks
+              if(e.target.tagName === 'INPUT' && e.target.type === 'text') return; 
               const id = row.getAttribute('data-toggle-cb');
               if (sheetState.selected.has(id)) sheetState.selected.delete(id); else sheetState.selected.add(id);
               updateDOM();
@@ -1290,10 +1450,8 @@
         };
     }
 
-    // Call updateDOM to sync the values with UI
     updateDOM();
     
-    // Focus-State wiederherstellen
     if (focusState) {
       let elToFocus = null;
       if (focusState.id) elToFocus = document.getElementById(focusState.id);
@@ -1353,7 +1511,7 @@
       if(name && !people.find(p=>p.name.toLowerCase()===name.toLowerCase())){
         activeList.people.push({ id: uid(), name, paypal: '' });
         await saveData();
-        window.renderPeopleManagerSheet(); // refresh
+        window.renderPeopleManagerSheet();
       }
     };
 
